@@ -9,6 +9,7 @@ app.use(express.urlencoded({
     extended: true
 }));
 app.use(express.static(path.join(__dirname, './resources')));
+require('./middleware/session.mdw')(app);
 require('./middleware/local.mdw')(app);
 require('./middleware/view.mdw')(app);
 require('./middleware/route.mdw')(app);

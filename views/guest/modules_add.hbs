@@ -1,0 +1,208 @@
+{{#section 'footer'}}
+
+<script>
+
+    $(document).ready(function () {
+
+        $("form").submit(function (e) {
+            e.preventDefault()
+            var url = $(this).attr("action");
+            console.log(url)
+            var request_method = $(this).attr("method")
+            console.log(request_method)
+            frmData = $(this).serialize()
+            console.log(frmData)
+            $.ajax({
+                type: request_method,
+                url: url,
+                data: frmData,
+                success: function (data) {
+
+                    Swal.fire(
+                        'Thêm môn học thành công',
+                        '',
+                        'success'
+                    )
+                        .then(function () {
+                            location.reload(true)
+
+                        })
+
+                }
+            });
+
+        })
+    });
+</script>
+
+{{/section}}
+<div class="wrapper">
+
+
+    <div class="container">
+        <div class="row">
+
+            <div class="span3">
+                <div class="sidebar">
+                    <ul class="widget widget-menu unstyled">
+                        <li><a href="/students/add"><i class="menu-icon icon-dashboard"></i>Quản lý sinh
+                                viên
+                            </a></li>
+                        <li class="active"><a href=""><i class="menu-icon icon-bullhorn"></i>Quản lý môn học</a>
+                        </li>
+                        <li><a href="/subjects/list"><i class="menu-icon icon-book"></i>Quản lý môn học </a></li>
+                        <li><a href="task.html"><i class="menu-icon icon-tasks"></i>Tasks <b
+                                    class="label orange pull-right">
+                                    19</b> </a></li>
+                    </ul>
+                    <!--/.widget-nav-->
+                    <ul class="widget widget-menu unstyled">
+                        <li><a href="ui-button-icon.html"><i class="menu-icon icon-bold"></i> Buttons </a></li>
+                        <li><a href="ui-typography.html"><i class="menu-icon icon-book"></i>Typography </a></li>
+                        <li><a href="form.html"><i class="menu-icon icon-paste"></i>Forms </a></li>
+                        <li><a href="table.html"><i class="menu-icon icon-table"></i>Tables </a></li>
+                        <li><a href="charts.html"><i class="menu-icon icon-bar-chart"></i>Charts </a></li>
+                    </ul>
+                    <!--/.widget-nav-->
+                    <ul class="widget widget-menu unstyled">
+                        <li><a class="collapsed" data-toggle="collapse" href="#togglePages"><i
+                                    class="menu-icon icon-cog">
+                                </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                                </i>More Pages </a>
+                            <ul id="togglePages" class="collapse unstyled">
+                                <li><a href="other-login.html"><i class="icon-inbox"></i>Login </a></li>
+                                <li><a href="other-user-profile.html"><i class="icon-inbox"></i>Profile </a></li>
+                                <li><a href="other-user-listing.html"><i class="icon-inbox"></i>All Users </a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#"><i class="menu-icon icon-signout"></i>Logout </a></li>
+                    </ul>
+                </div>
+                <!--/.sidebar-->
+            </div>
+            <!--/.span3-->
+            <div class="span9">
+                <div class="content">
+                    <div class="btn-controls">
+                        <div class="btn-box-row row-fluid">
+                            <a href="/students/add" class="btn-box span3">
+                                <i class="icon-list"></i>
+                                <b>Danh sách môn học</b>
+                            </a>
+                            <a href="/students/add-new" class="btn-box span3 bg-light">
+                                <i class="icon-plus"></i>
+                                <b>Thêm môn học</b>
+                            </a>
+                            <a href="" class="btn-box span3">
+                                <i class="icon-search"></i>
+                                <b>Tìm kiếm môn học</b>
+                            </a>
+                            <a href="/students/edit-info" class="btn-box span3">
+                                <i class="icon-edit"></i>
+                                <b>Chỉnh sửa môn học</b>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="module">
+                        <div class="module-head">
+                            <h3>Nhập môn học</h3>
+                        </div>
+                        <div class="module-body">
+                            <form class="form-horizontal row-fluid" action="/modules/add" method="post">
+                                <div class="control-group">
+                                    <label class="control-label" for="MaMonHoc">Mã môn học</label>
+                                    <div class="controls">
+                                        <input type="text" id="MaMonHoc" placeholder="Nhập mã môn học" name="MaMonHoc"
+                                            class="span8" required>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="TenMonHoc">Tên môn học</label>
+                                    <div class="controls">
+                                        <input type="text" id="TenMonHoc" placeholder="Nhập tên môn học" class="span8"
+                                            required name="MonHoc">
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="control-group">
+                                    <label class="control-label" for="SoTC">Số tín chỉ</label>
+                                    <div class="controls">
+                                        <div class="input-append">
+                                            <input type="number" value="1" class="span8" min="1" max="10" name="SoTC"><span class="add-on"
+                                                >TC</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">Số giờ tín chỉ</label>
+                                    <div class="controls">
+                                        <div class="input-prepend">
+                                            <span class="add-on">Lý thuyết</span><input class="span3" type="number"
+                                                value="0" id="LyThuyet" min="0" name="LyThuyet">
+                                        </div>
+                                       
+                                    </div>
+                                    <br>
+                                     <div class="controls">
+                                       
+                                        <div class="input-prepend">
+                                            <span class="add-on">Thực hành</span><input class="span3" type="number"
+                                                value="0" id="ThucHanh" min="0" name="ThucHanh">
+                                        </div>
+                                       
+                                    </div>
+                                    <br>
+                                     <div class="controls">
+                                        
+                                         <div class="input-prepend">
+                                            <span class="add-on">Tự học</span><input class="span3" type="number"
+                                                value="0" id="TuHoc" min="0" name="TuHoc">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="basicinput">Môn tiên quyết</label>
+                                    <div class="controls">
+                                        <select tabindex="1" data-placeholder="Chọn môn học" class="span8"
+                                            name="MonTienQuyet">
+                                            <option value="">Không</option>
+                                            {{#each list}}
+                                            <option value="{{@index}}">{{MonHoc}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="TenTiengAnh">Tên tiếng anh</label>
+                                    <div class="controls">
+                                        <input type="text" id="TenTiengAnh" placeholder="Nhập tên tiếng Anh"
+                                            class="span8" required name="TenTiengAnh">
+                                    </div>
+                                </div>
+
+
+
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <button type="submit" class="btn btn-info">Thêm môn học</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--/.content-->
+            </div>
+            <!--/.span9-->
+        </div>
+    </div>
+    <!--/.container-->
+</div>
+<!--/.wrapper-->
