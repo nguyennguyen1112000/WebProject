@@ -1,0 +1,38 @@
+{
+  "name": "0project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nguyennguyen1112000/WebProject.git"
+  },
+  "keywords": [
+    "web",
+    "app"
+  ],
+  "author": "Nguyen Nguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nguyennguyen1112000/WebProject/issues"
+  },
+  "homepage": "https://github.com/nguyennguyen1112000/WebProject#readme",
+  "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
+    "@sweetalert2/themes": "^4.0.5",
+    "csv-parser": "^3.0.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.0",
+    "express-handlebars-sections": "^1.0.1",
+    "express-session": "^1.17.1",
+    "fast-csv": "^4.3.6",
+    "middleware-nodejs": "^1.0.0",
+    "mongoose": "^5.12.3",
+    "mongoose-slug-generator": "^1.0.4",
+    "multer": "^1.4.2"
+  }
+}
