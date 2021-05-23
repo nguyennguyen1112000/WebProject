@@ -1,3 +1,4 @@
+
 <div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
@@ -5,8 +6,8 @@
 					<i class="icon-reorder shaded"></i>
 				</a>
 
-			  	<a class="brand" href="index.html">
-			  		Edmin
+			  	<a class="brand" href="/students/upload">
+			  		Dashboard
 			  	</a>
 
 				<div class="nav-collapse collapse navbar-inverse-collapse">
@@ -55,7 +56,9 @@
 								<li><a href="#">Edit Profile</a></li>
 								<li><a href="#">Account Settings</a></li>
 								<li class="divider"></li>
-								<li><a href="#">Logout</a></li>
+								<form action="/login/out" method="post" class="frm-out">
+								<li><a href="javascript:logout()">Logout</a></li>
+								</form>
 							</ul>
 						</li>
 					</ul>

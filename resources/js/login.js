@@ -3,11 +3,8 @@
 $("form").submit(function (e) {
    e.preventDefault()
    var url = $(this).attr("action");
-   console.log(url)
    var request_method = $(this).attr("method");
-   console.log(request_method)
    frmData = $(this).serialize()
-   console.log(frmData)
    $.ajax({
        type: request_method,
        url: url,

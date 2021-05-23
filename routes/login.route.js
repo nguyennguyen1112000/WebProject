@@ -19,26 +19,30 @@ router.get('/admin', async function (req, res) {
 
 router.post('/admin', async function (req, res) {
 
-  console.log(req.body)
   password = req.body.MatKhau;
-  admin.findOne({ TenDangNhap: req.body.TenDangNhap }, (err, results) => {
+  await admin.findOne({ TenDangNhap: req.body.TenDangNhap }, (err, results) => {
     if (err) {
       console.error(err);
       res.send('View error log at server console.');
     }
     else {
-      console.log(results);
       if(results==null){
-        res.json({err:0})
+        res.render('admin/login',{layout:false,
+        err: {err:"Tên đăng nhập không chính xác"}})
       }
       else{
         const hash=results.MatKhau
         bcrypt.compare(password, hash, function(err, result) {
-          if(result) {
-            console.log("Đăng nhập thành công");
-            req.session.admin=true;
-            res.render('guest/students_add',{layout:false})}
-          else res.json({err:1})
+          if(result)  {
+            req.session.admin = true;
+            res.render('guest/students_add')
+          
+        }
+        else{
+          res.render('admin/login',{layout:false,
+            err: {err:"Mật khẩu không chính xác"}})
+        }
+        
       });
       }
       
@@ -49,6 +53,11 @@ router.post('/admin', async function (req, res) {
     
 
 
+});
+
+router.post('/out', async function (req, res) {
+  req.session.admin = false;
+  res.render('admin/login',{layout:false})
 });
 
 

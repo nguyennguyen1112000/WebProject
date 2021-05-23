@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-
 const modules = require('../model/modules.model')
 const { mutipleMongooseToObject } = require('../utils/mongoose');
-
+const ModuleModel = require('../utils/modules')
+let moduleModel = new ModuleModel()
 router.get('/list', async function (req, res) {
 
     try {
@@ -28,21 +28,18 @@ router.get('/list', async function (req, res) {
 })
 
 router.get('/add', async function (req, res) {
-    modules.find({},'MaMonHoc MonHoc',(err,results)=>{
-        if(err){
-            console.error(err);
-            res.send('View error log at server console.');
-        }
-        else{
+    const results = await moduleModel.find()
+    try{
             res.render('guest/modules_add',{
-                list:mutipleMongooseToObject(results)
-            })
-        }
-    })
+            list:mutipleMongooseToObject(results)
+        })
+    }
+    catch(err){
+        console.error(err);
+        res.send('View error log at server console.');
+    }
+   
       
-
-
-
 })
 
 
@@ -54,7 +51,6 @@ router.post('/add', async function (req, res) {
                 res.send('View error log at server console.');
             }
             else{
-            console.log(req.body)
             const mdl=req.body;
             const new_module= new modules({
             MaMonHoc:mdl.MaMonHoc,

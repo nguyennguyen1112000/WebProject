@@ -1,0 +1,273 @@
+{{#section 'footer'}}
+<script>
+
+
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+
+        });
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
+    });
+
+
+</script>
+<script>
+    $(".date").datepicker();
+</script>
+<script>
+
+    $(document).ready(function () {
+
+        var a = $(".GVLT").html();
+        n = $('.GVLT').length;
+        var x = 0;
+        var max_fields = 10;
+        var wrapper = $('.wrapperLT');
+        var add_button = $(".add_GVLT");
+        $(add_button).click(function (e) {
+            e.preventDefault();
+            if (x < max_fields) {
+                x++;
+                const newEle = '<div class="controls add_teacher">' + a + '<button type="button" class="remove_field btn-danger">Xóa</button></div>';
+                $(`#wrapperLT`).append(newEle)
+            }
+        });
+
+        $(wrapper).on("click", ".remove_field", function (e) {
+
+            $(this).parent('.add_teacher').remove(); x--;
+        })
+        //Giảng viên thực hành
+        var b = $(".GVTH").html();
+        m = $('.GVTH').length;
+        var y = 0;
+        var wrapper1 = $('.wrapperTH');
+        var add_button1 = $(".add_GVTH");
+        $(add_button1).click(function (e) {
+
+            if (y < max_fields) {
+                y++;
+                const newEle = '<div class="controls add_teacher">' + b + '<button type="button" class="remove_field btn-danger">Xóa</button></div>';
+                $(`#wrapperTH`).append(newEle)
+            }
+        });
+
+        $(wrapper1).on("click", ".remove_field", function (e) {
+            e.preventDefault();
+            $(this).parent('.add_teacher').remove(); y--;
+        })
+    });
+
+
+</script>
+
+<script>
+    //Ajax form
+    $(document).ready(function () {
+        $("form").submit(function (e) {
+            e.preventDefault()
+            var url = $(this).attr("action");
+            var request_method = $(this).attr("method")
+            frmData = $(this).serialize()
+            $.ajax({
+                type: request_method,
+                url: url,
+                data: frmData,
+                success: function (data) {
+                    console.log(data)
+                    Swal.fire(
+                        'Cập nhật học phần',
+                        'Cập nhật học phần thành công!',
+                        'success'
+                    )
+                        .then(function () {
+                            location.reload(true)
+
+                        })
+
+                }
+            });
+
+        })
+    });
+</script>
+
+
+{{/section}}
+
+<div class="span9">
+    <div class="content">
+        <div class="btn-controls">
+            <div class="btn-box-row row-fluid">
+                <a href="/subjects/list" class="btn-box span3 ">
+                    <i class="icon-list"></i>
+                    <b>Danh sách học phần</b>
+                </a>
+                <a href="/subjects/add" class="btn-box span3">
+                    <i class="icon-plus"></i>
+                    <b>Thêm học phần</b>
+                </a>
+                <a href="/subjects/edit" class="btn-box span3 bg-light">
+                    <i class="icon-edit"></i>
+                    <b>Chỉnh sửa học phần</b>
+                </a>
+            </div>
+        </div>
+        {{#with detail as |detail|}}
+
+        <div class="module">
+            <div class="module-head">
+                <a href="/subjects/list">Quản lý học phần</a> > <a href="/subjects/edit">Chỉnh sửa danh sách học
+                    phần</a>> HP {{MaHP}}
+            </div>
+
+            <div class="module-body">
+                <form action="/subjects/edit" method="post" id="frmEdit{{MaHP}}">
+                    <div class="control-group">
+                        <label class="control-label">Mã ĐKHP</label>
+                        <div class="controls">
+                            <input type="text" value="{{MaDKHP}}" name="MaDKHP" class="span8" required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Thuộc môn học</label>
+                        <div class="controls">
+                            <select tabindex="1" class="span8" name="MonHoc">
+                                {{#each ../list_mod as |list_mod|}}
+                                <option value="{{list_mod._id}}" {{#ifEID list_mod._id detail.MonHoc._id}}
+                                    selected="selected" {{/ifEID}}>
+                                    {{list_mod.MonHoc}}</option>
+
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Mã học
+                            phần</label>
+                        <div class="controls">
+                            <input type="text" value="{{MaHP}}" name="MaHP" class="span8" required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Tên học
+                            phần</label>
+                        <div class="controls">
+                            <input type="text" value="{{TenHP}}" class="span8" required name="TenHP">
+                        </div>
+                    </div>
+                    <div class="control-group wrapperLT" id="wrapperLT">
+                        <label class="control-label">Giảng viên Lý
+                            thuyết</label>
+                        <button type="button" value="{{MaHP}}" class="add_GVLT"><i class="icon-plus"></i></button>
+                        {{#each GVLyThuyet as |GVLyThuyet|}}
+                        {{#if @first}}
+                        <div class="controls GVLT" id="GVLT{{_id}}">
+                            <select tabindex="1" data-placeholder="Chọn giảng viên" class="span8" name="GVLyThuyet">
+                                {{#each ../../list_GV as |list_GV|}}
+                                <option value="{{_id}}" {{#ifEID list_GV._id GVLyThuyet._id}} selected="selected"
+                                    {{/ifEID}}>
+                                    {{TenGV}}</option>
+
+                                {{/each}}
+                            </select>
+                        </div>
+                        {{else}}
+                        <div class="controls add_teacher">
+                            <select tabindex="1" data-placeholder="Chọn giảng viên" class="span8" name="GVLyThuyet">
+                                {{#each ../../list_GV as |list_GV|}}
+                                <option value="{{_id}}" {{#ifEID list_GV._id GVLyThuyet._id}} selected="selected"
+                                    {{/ifEID}}>
+                                    {{TenGV}}</option>
+
+                                {{/each}}
+                            </select>
+                            <button type="button" class="remove_field btn-danger">Xóa</button>
+                        </div>
+                        {{/if}}
+
+                        {{/each}}
+
+                    </div>
+                    <div class="control-group wrapperTH" id="wrapperTH">
+                        <label class="control-label" for="basicinput">Giảng viên thực hành</label>
+                        <button type="button" value="{{@index}}" class="add_GVTH"><i class="icon-plus"></i></button>
+                        {{#each GVThucHanh as |GVThucHanh|}}
+                        {{#if @first}}
+                        <div class="controls GVTH" id="GVTH{{_id}}">
+                            <select tabindex="1" data-placeholder="Chọn giảng viên" class="span8" name="GVThucHanh">
+                                {{#each ../../list_GV as |list_GV|}}
+                                <option value="{{_id}}" {{#ifEID list_GV._id GVThucHanh._id}} selected="selected"
+                                    {{/ifEID}}>
+                                    {{TenGV}}</option>
+
+                                {{/each}}
+                            </select>
+                        </div>
+                        {{else}}
+                        <div class="controls add_teacher">
+                            <select tabindex="1" data-placeholder="Chọn giảng viên" class="span8" name="GVThucHanh">
+                                {{#each ../../list_GV as |list_GV|}}
+                                <option value="{{_id}}" {{#ifEID list_GV._id GVThucHanh._id}} selected="selected"
+                                    {{/ifEID}}>
+                                    {{TenGV}}</option>
+
+                                {{/each}}
+                            </select>
+                            <button type="button" class="remove_field btn-danger">Xóa</button>
+                        </div>
+                        {{/if}}
+
+                        {{/each}}
+
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="TenTiengAnh">Học kì</label>
+                        <div class="controls">
+                            <input type="number" id="HocKi" value="{{HocKi}}" class="span8" required name="HocKi"
+                                min="1" max="3">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="TenTiengAnh">Số nhóm thực hành</label>
+                        <div class="controls">
+                            <input type="number" value="{{SoNhomTH}}" class="span8" required name="SoNhomTH" min="0"
+                                max="3">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Ngày bắt đầu</label>
+                        <div class="controls">
+                            <input type="text" value="{{DateFormat NgayBatDau}}" class="span8 date" required
+                                name="NgayBatDau">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Ngày kết thúc</label>
+                        <div class="controls">
+                            <input type="text" value="{{DateFormat NgayKetThuc}}" class="span8 date" required
+                                name="NgayKetThuc">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn btn-info">Cập nhật</button>
+                        </div>
+                    </div>
+                </form>
+                {{/with}}
+
+            </div>
+        </div>
+    </div>
+    <!--/.content-->
+</div>
+<!--/.span9-->

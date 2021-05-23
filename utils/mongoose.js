@@ -1,4 +1,3 @@
-const { mapReduce } = require("../model/Account.model")
 
 module.exports = {
     mutipleMongooseToObject: function (mongooses){

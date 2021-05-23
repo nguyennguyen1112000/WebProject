@@ -1701,3 +1701,11 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', end
 .scrollme {
     overflow-x: auto;
 }
+.table th, .table td{
+	text-align: center;
+}
+
+.bold-red{
+	font-weight: bold;
+	color: #ff3939;
+}

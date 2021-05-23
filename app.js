@@ -1,9 +1,17 @@
 const express = require('express');
 const path = require('path');
 const db = require('./utils/db')
+var cookieSession = require('cookie-session')
     //Kết nối database
 db.connect()
 const app = express();
+app.use(cookieSession({
+    name: 'session',
+    keys: ['key1', 'key2'],
+  
+    // Cookie Options
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }))
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true

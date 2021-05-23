@@ -1,0 +1,105 @@
+{{#section 'footer'}}
+<script>
+
+
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+
+        });
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
+    });
+
+
+</script>
+
+
+{{/section}}
+
+<div class="span9">
+    <div class="content">
+        <div class="btn-controls">
+            <div class="btn-box-row row-fluid">
+                <a href="/subjects/list" class="btn-box span3 bg-light">
+                    <i class="icon-list"></i>
+                    <b>Danh sách học phần</b>
+                </a>
+                <a href="/subjects/add" class="btn-box span3">
+                    <i class="icon-plus"></i>
+                    <b>Thêm học phần</b>
+                </a>
+                <a href="/subjects/edit" class="btn-box span3">
+                    <i class="icon-edit"></i>
+                    <b>Chỉnh sửa học phần</b>
+                </a>
+
+            </div>
+        </div>
+        <div class="module">
+            <div class="module-head">
+                <h3>
+                    Danh sách học phần</h3>
+            </div>
+
+            <div class="module-body table scrollme">
+                <table cellpadding="0" cellspacing="0" border="0"
+                    class="datatable-1 table table-bordered table-striped display" id="myTable" class="display">
+                    <thead>
+                        <tr>
+                            <th>Mã môn học</th>
+                            <th>Tên học phần</th>
+                            <th>Giảng viên</th>
+                            <th>Học kì</th>
+                            <th>Năm học</th>
+                            <th>Số học viên</th>
+                            <th>Số nhóm TH</th>
+                            <th>Tình trạng</th>
+                        </tr>
+
+
+
+                    </thead>
+                    <tbody>
+
+                        {{#each list}}
+                        <tr class="odd gradeX" id="row{{@index}}">
+
+                            <td>{{MonHoc.MaMonHoc}}</td>
+                            <td>{{TenHP}}</td>
+                            <td>
+                                {{#each GVLyThuyet}}
+                                {{TenGV}} (GV LyThuyet),
+                                {{/each}}
+                                {{#each GVThucHanh}}
+                                {{TenGV}} (GV ThucHanh),
+                                {{/each}}
+                            </td>
+                            <td>{{HocKi}}</td>
+                            <td>{{NamHoc NgayBatDau NgayKetThuc HocKi}}</td>
+                            <td>{{countArray DSSinhVien}} <br><span><a href="/subjects/students_list/{{MaHP}}">Xem danh
+                                        sách</a></span></td>
+                            <td>{{SoNhomTH}}</td>
+                            <td> {{#ifCond TinhTrang false}}
+                                Đã hoàn thành
+
+                                {{else}}
+                                Chưa hoàn thành
+                                {{/ifCond}}
+                            </td>
+                        </tr>
+
+                        {{/each}}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--/.content-->
+</div>

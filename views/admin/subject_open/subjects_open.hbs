@@ -1,0 +1,203 @@
+{{#section 'footer'}}
+
+<script>
+
+    $(document).ready(function () {
+        //
+        $(".date").datepicker({
+            isRTL: true,
+            dateFormat: "yy/mm/dd 23:59:59",
+            changeMonth: true,
+            changeYear: true
+        });
+
+        var a = $("#HocPhanMo").html();
+        console.log(a)
+        var max_fields = 10; //maximum input boxes allowed
+        var wrapper = $("#wrapper1"); //Fields wrapper
+        var add_button = $(".add_Subject"); //Add button ID
+
+        var x = 1; //initlal text box count
+        $(add_button).click(function (e) { //on add input button click
+            e.preventDefault();
+            if (x < max_fields) { //max input box allowed
+                x++; //text box increment
+                const newEle = '<div class="controls add_teacher">' + a + '<button type="button" class="remove_field btn-danger">Xóa</button></div>';
+                $(wrapper).append(newEle)
+            }
+        });
+
+        $(wrapper).on("click", ".remove_field", function (e) { //user click on remove text
+            e.preventDefault(); $(this).parent('.add_teacher').remove(); x--;
+        })
+        var typingTimer;                //timer identifier
+        var doneTypingInterval = 5000;  //Thời gian chờ 5s
+
+        //on keyup, start the countdown
+        $('#MaDKHP').on("keyup", function () {
+            if (typingTimer) clearTimeout(typingTimer);
+            val = $(this).val()
+            typingTimer = setTimeout(doneTyping(val), doneTypingInterval);
+        });
+
+        //Kiểm tra
+        function doneTyping(val) {
+            $.getJSON(`/subjects/register/search/${val}`, function (data) {
+                console.log(data)
+                if (data.err) $('.mess').html(data.err)
+
+
+            });
+
+        }
+
+
+    });
+
+
+</script>
+
+{{/section}}
+
+<div class="span9">
+    <div class="content">
+        <div class="btn-controls">
+            <div class="btn-box-row row-fluid">
+                <a href="/subjects/open/list" class="btn-box span3 ">
+                    <i class="icon-list"></i>
+                    <b>Các học phần đã mở</b>
+                </a>
+                <a href="/subjects/open" class="btn-box span3 bg-light">
+                    <i class="icon-plus"></i>
+                    <b>Mở ĐKHP</b>
+                </a>
+                <a href="/subjects/open/edit" class="btn-box span3">
+                    <i class="icon-edit"></i>
+                    <b>Chỉnh sửa ĐKHP</b>
+                </a>
+            </div>
+        </div>
+        <div class="module">
+            <div class="module-head">
+                <h3>Bước 1: Thông tin chung</h3>
+                {{#if step_on}}
+                           <form action="/subjects/open/reset" method="post">
+                <div class="controls">
+                    <button type="submit" class="btn btn-danger">Reset thông tin <i class="icon-spinner"></i> </button>
+                </div>
+                </form>               
+                {{/if}}
+              
+
+            </div>
+            <div class="module-body">
+                {{#if step_on}}
+                <form class="form-horizontal row-fluid" action="/subjects/open/step2" method="post">
+                    <div class="control-group">
+                        <label class="control-label">Mã ĐKHP</label>
+                        <div class="controls">
+                            <input type="text" name="MaDKHP" id="MaDKHP" value="{{DKHP.MaDKHP}}" class="span8" required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Học kì</label>
+                        <div class="controls">
+                            <input type="number" name="HocKi" value="{{DKHP.HocKi}}" class="span8" min="1" max="3"
+                                required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Ngày bắt đầu học kì</label>
+                        <div class="controls">
+                            <input type="text" name="NgayBatDauHK" value="{{DKHP.NgayBatDauHK}}" class="span8 date"
+                                required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Ngày kết thúc HK (dự kiến)</label>
+                        <div class="controls">
+                            <input type="text" name="NgayKetThucHK" value="{{DKHP.NgayKetThucHK}}" class="span8 date"
+                                required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Thời gian bắt đầu đăng kí</label>
+                        <div class="controls">
+                            <input type="text" name="ThoiGianBD" value="{{DKHP.TGBD}}" class="span8 date" required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Thời gian kết thúc đăng kí</label>
+                        <div class="controls">
+                            <input type="text" name="ThoiGianKT" value="{{DKHP.TGKT}}" class="span8 date" required>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn btn-info">Tiếp theo <i class="icon-chevron-right"></i>
+                            </button>
+                        </div>
+                        <br>
+                        <h5 class="bold-red">Lưu ý: 1.Nhập mã DKHP chính xác trước khi sang bước tiếp theo</h5>
+                        <h5 class="bold-red">Lưu ý: 2.Không thoát ra cho đến khi hoàn thành bước cuối cùng.</h5>
+                    </div>
+                </form>
+                {{else}}
+                <form class="form-horizontal row-fluid" action="/subjects/open/step2" method="post">
+                    <div class="control-group">
+                        <label class="control-label">Mã ĐKHP</label>
+                        <div class="controls">
+                            <input type="text" name="MaDKHP" id="MaDKHP" placeholder="Nhập mã ĐKHP" class="span8"
+                                required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Học kì</label>
+                        <div class="controls">
+                            <input type="number" name="HocKi" value="1" class="span8" min="1" max="3" required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Ngày bắt đầu học kì</label>
+                        <div class="controls">
+                            <input type="text" name="NgayBatDauHK" class="span8 date" required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Ngày kết thúc HK (dự kiến)</label>
+                        <div class="controls">
+                            <input type="text" name="NgayKetThucHK" class="span8 date" required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Thời gian bắt đầu đăng kí</label>
+                        <div class="controls">
+                            <input type="text" name="ThoiGianBD" class="span8 date" required>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Thời gian kết thúc đăng kí</label>
+                        <div class="controls">
+                            <input type="text" name="ThoiGianKT" class="span8 date" required>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn btn-info">Tiếp theo <i class="icon-chevron-right"></i>
+                            </button>
+                        </div>
+                        <br>
+                        <h5 class="bold-red">Lưu ý: 1.Nhập mã DKHP chính xác trước khi sang bước tiếp theo</h5>
+                        <h5 class="bold-red">Lưu ý: 2.Không thoát ra cho đến khi hoàn thành bước cuối cùng.</h5>
+                    </div>
+                </form>
+                {{/if}}
+
+            </div>
+        </div>
+    </div>
+    <!--/.content-->
+</div>
+<!--/.span9-->

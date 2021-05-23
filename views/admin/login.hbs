@@ -68,7 +68,9 @@
 							</div>
 						</div>
 						<div class="module-foot">
-							<h5><span style="color:#dc183a;" class="LoiDangNhap"></span></h5>
+							{{#with err}}
+								<h5><span style="color:#dc183a;" class="LoiDangNhap">{{err}}</span></h5>
+							{{/with}}
 							<div class="control-group">
 								<div class="controls clearfix">
 									<button type="submit" class="btn btn-primary pull-right">Login</button>
@@ -88,10 +90,14 @@
 		<div class="container">
 			 
 
-			<b class="copyright">&copy; 2014 Edmin - EGrappler.com </b> All rights reserved.
+			<b class="copyright">&copy; Designed by Nguyen Binh Nguyen</b> 
 		</div>
 	</div>
 
 </body>
 <script src="/js/login.js"></script>
+
+
+
+
 

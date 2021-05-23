@@ -3,11 +3,19 @@ const router = express.Router();
 const multer = require('multer');
 const { route } = require('./dashboard.route');
 const path = require('path');
-const fastcsv = require("fast-csv");
 const fs = require('fs')
 const student = require('../model/students.model')
-const { mutipleMongooseToObject } = require('../utils/mongoose');
+const { mutipleMongooseToObject, singleMongooseToObject } = require('../utils/mongoose');
 const { find } = require('../model/students.model');
+const auth = require('../middleware/auth.mdw')
+//Đọc file excel
+const reader = require('xlsx')
+//Class student
+const StudentModel = require('../utils/students')
+let studentModel = new StudentModel()
+//Ngành học
+const majors = require('../model/major.model');
+const Schema = require('mongoose');
 
 const storage = multer.diskStorage({
     destination: './resources/uploads/',
@@ -27,85 +35,83 @@ const upload = multer({
 
 // Check File Type
 function checkFileType(file, cb) {
-    // Allowed ext
-    const filetypes = /csv/;
-    // Check ext
+    const filetypes = /xlsx|xls/;
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    // Check mime
-    const mimetypes = /excel/;
-    const mimetype = mimetypes.test(file.mimetype);
-    if (mimetype && extname) {
+    if ( extname) {
         return cb(null, true);
     } else {
-        cb('Error: CSV file Only!');
+        cb('Error: Excel file Only!');
     }
 }
 
+let provinces = [{ province: "An Giang" }, { province: "Bà Rịa - Vũng Tàu" }, { province: "Bắc Giang" }, { province: "Bắc Kạn" }, { province: "Bạc Liêu" }, { province: "Bắc Ninh" }, { province: "Bến Tre" }, { province: "Bình Định" }, { province: "Bình Dương" },
+{ province: "Bình Phước" }, { province: "Bình Thuận" }, { province: "Cà Mau" }, { province: "Cao Bằng" }, { province: "Đắk Lắk" }, { province: "Đắk Nông" }, { province: "Điện Biên" }, { province: "Đồng Nai" }, { province: "Đồng Tháp" }, { province: "Gia Lai" }, { province: "Hà Giang" },
+{ province: "Hà Nam" }, { province: "Hà Tĩnh" }, { province: "Hải Dương" }, { province: "Hậu Giang" }, { province: "Hòa Bình" }, { province: "Hưng Yên" }, { province: "Khánh Hòa" }, { province: "Kiên Giang" }, { province: "Kon Tum" }, { province: "Lai Châu" }, { province: "Lâm Đồng" },
+{ province: "Lạng Sơn" }, { province: "Lào Cai" }, { province: "Long An" }, { province: "Nam Định" }, { province: "Nghệ An" }, { province: "Ninh Bình" }, { province: "Ninh Thuận" }, { province: "Phú Thọ" }, { province: "Quảng Bình" }, { province: "Quảng Nam" }, { province: "Quảng Ngãi" },
+{ province: "Quảng Ninh" }, { province: "Quảng Trị" }, { province: "Sóc Trăng" }, { province: "Sơn La" }, { province: "Tây Ninh" }, { province: "Thái Bình" }, { province: "Thái Nguyên" }, { province: "Thanh Hóa" }, { province: "Thừa Thiên Huế" }, { province: "Tiền Giang" },
+{ province: "Trà Vinh" }, { province: "Tuyên Quang" }, { province: "Vĩnh Long" }, { province: "Vĩnh Phúc" }, { province: "Yên Bái" }, { province: "Phú Yên" }, { province: "Cần Thơ" }, { province: "Đà Nẵng" }, { province: "Hải Phòng" }, { province: "Hà Nội" }, { province: "TP HCM" }];
+// Lưu danh sách sinh viên vào DB
+router.post('/upload/save', async function (req, res) {
+    try {
+        filepath = req.body.path
+        const file = reader.readFile(filepath)
 
-router.post('/add', (req, res) => {
+        let data = []
+        const sheets = file.SheetNames
+        for (let i = 0; i < sheets.length; i++) {
+            const temp = reader.utils.sheet_to_json(
+                file.Sheets[file.SheetNames[i]])
+            temp.forEach((res) => {
+                data.push(res)
+            })
+        }
+        await studentModel.addList(data)
+        res.render('admin/students_upload')
+    }
+    catch(err){
+        console.error(err);
+        res.send('View error log at server console.');
+    }
+})
+
+router.post('/upload', (req, res) => {
     upload(req, res, (err) => {
         if (err) {
-            res.render('guest/students_add', {
+            res.render('admin/students_upload', {
                 msg: err
             });
         } else {
             if (req.file == undefined) {
-                res.render('guest/students_add', {
+                res.render('admin/students_upload', {
                     msg: 'Error: No File Selected!'
                 });
             } else {
 
-                let stream = fs.createReadStream(`resources/uploads/${req.file.filename}`);
-                let csvData = [];
-                let csvStream = fastcsv
-                    .parse()
-                    .on("data", function (data) {
-                        csvData.push({
-                            MSSV: data[0],
-                            HoLot: data[1],
-                            Ten: data[2],
-                            GioiTinh: data[3] == "Nam" ? 1 : 0,
-                            NgaySinh: data[4],
-                            NoiSinh: data[5],
-                            Lop: data[6],
-                            Nganh: data[7],
-                            SoTC: data[8],
-                            DiemTBTichLuy: data[9],
-                            XepLoai: data[10]
-                        });
-                    })
-                    .on("end", function () {
-                        // remove the first line: header
-                        csvData.shift();
-                        csvData.forEach(std => {
-                            student.create(std, function (err, std) {
-                                if (err) return handleError(err);
-
-                            });
-                        });
-
-                        res.render('guest/students_add', {
-                            msg: 'File Uploaded!',
-                            list: csvData
-                        });
-
-
-
-
-
-                    });
-                stream.pipe(csvStream);
-
-
-
+                  filepath = `resources/uploads/${req.file.filename}`
+                  const file = reader.readFile(filepath)
+  
+                  let data = []  
+                  const sheets = file.SheetNames
+                  for(let i = 0; i < sheets.length; i++)
+                  {
+                     const temp = reader.utils.sheet_to_json(
+                          file.Sheets[file.SheetNames[i]])
+                     temp.forEach((res) => {
+                        data.push(res)
+                     })
+                  }
+                  res.render('admin/students_upload',{
+                      list: data,
+                      file: {file_path:`resources/uploads/${req.file.filename}`}
+                  })
             }
         }
     });
 })
-router.get('/add', async function (req, res) {
+router.get('/upload',auth, async function (req, res) {
     try {
 
-        res.render('guest/students_add');
+        res.render('admin/students_upload');
     } catch (err) {
         console.error(err);
         res.send('View error log at server console.');
@@ -115,15 +121,10 @@ router.get('/add', async function (req, res) {
 
 router.get('/add-new', async function (req, res) {
     try {
-        const provinces = [{ province: "An Giang" }, { province: "Bà Rịa - Vũng Tàu" }, { province: "Bắc Giang" }, { province: "Bắc Kạn" }, { province: "Bạc Liêu" }, { province: "Bắc Ninh" }, { province: "Bến Tre" }, { province: "Bình Định" }, { province: "Bình Dương" },
-        { province: "Bình Phước" }, { province: "Bình Thuận" }, { province: "Cà Mau" }, { province: "Cao Bằng" }, { province: "Đắk Lắk" }, { province: "Đắk Nông" }, { province: "Điện Biên" }, { province: "Đồng Nai" }, { province: "Đồng Tháp" }, { province: "Gia Lai" }, { province: "Hà Giang" },
-        { province: "Hà Nam" }, { province: "Hà Tĩnh" }, { province: "Hải Dương" }, { province: "Hậu Giang" }, { province: "Hòa Bình" }, { province: "Hưng Yên" }, { province: "Khánh Hòa" }, { province: "Kiên Giang" }, { province: "Kon Tum" }, { province: "Lai Châu" }, { province: "Lâm Đồng" },
-        { province: "Lạng Sơn" }, { province: "Lào Cai" }, { province: "Long An" }, { province: "Nam Định" }, { province: "Nghệ An" }, { province: "Ninh Bình" }, { province: "Ninh Thuận" }, { province: "Phú Thọ" }, { province: "Quảng Bình" }, { province: "Quảng Nam" }, { province: "Quảng Ngãi" },
-        { province: "Quảng Ninh" }, { province: "Quảng Trị" }, { province: "Sóc Trăng" }, { province: "Sơn La" }, { province: "Tây Ninh" }, { province: "Thái Bình" }, { province: "Thái Nguyên" }, { province: "Thanh Hóa" }, { province: "Thừa Thiên Huế" }, { province: "Tiền Giang" },
-        { province: "Trà Vinh" }, { province: "Tuyên Quang" }, { province: "Vĩnh Long" }, { province: "Vĩnh Phúc" }, { province: "Yên Bái" }, { province: "Phú Yên" }, { province: "Cần Thơ" }, { province: "Đà Nẵng" }, { province: "Hải Phòng" }, { province: "Hà Nội" }, { province: "TP HCM" }];
-
-        res.render('guest/students_add_new', {
-            provinces: provinces
+        const major = await majors.find({})
+        res.render('admin/students_add_new', {
+            provinces: provinces,
+            majors: mutipleMongooseToObject(major),
         });
     } catch (err) {
         console.error(err);
@@ -132,21 +133,12 @@ router.get('/add-new', async function (req, res) {
 
 })
 
-// router.get('/find', async function (req, res) {
-//     try {
 
-//         res.render('guest/students_find');
-//     } catch (err) {
-//         console.error(err);
-//         res.send('View error log at server console.');
-//     }
-
-// })
 router.get('/find', async function (req, res) {
     try {
         if (req.query.text_search == undefined) {
 
-            res.render('guest/students_find')
+            res.render('admin/students_find')
         }
         else {
             student.find({ $text: { $search: req.query.text_search } })
@@ -158,7 +150,7 @@ router.get('/find', async function (req, res) {
                         if (obj.GioiTinh == 1) obj.GioiTinh = 'Nam'
                         else obj.GioiTinh = 'Nữ'
                     })
-                    res.render('guest/students_find', {
+                    res.render('admin/students_find', {
                         list: students,
                         empty: students.length == 0
                     })
@@ -173,6 +165,11 @@ router.get('/find', async function (req, res) {
 })
 router.post('/add-new', async function (req, res) {
     try {
+        data = req.body
+        data.Nganh = new Schema.Types.ObjectId(data.Nganh)
+        const result = await studentModel.addOne(data)
+        if(result == false) res.json({err:'Sinh viên này đã tồn tại'})
+        else res.json({succ:'Thêm thành công sinh viên'})
     } catch (err) {
         console.error(err);
         res.send('View error log at server console.');
@@ -182,6 +179,7 @@ router.post('/add-new', async function (req, res) {
 
 router.post('/edit-info', async function (req, res) {
     condition=req.body.MSSV;
+    console.log(condition)
     data=req.body;
     console.log(data)
     data.NgaySinh=Date.parse(data.NgaySinh)
@@ -197,13 +195,31 @@ router.post('/edit-info', async function (req, res) {
 
 })
 
+router.get('/edit-info/:MSSV', async function (req, res) {
+    const condition = req.params
+    try {
+        let student = await studentModel.findOne(condition)
+        let major = await majors.find({})
+        res.render('admin/students_edit_detail', {
+            detail: singleMongooseToObject(student),
+            province: provinces,
+            majors: mutipleMongooseToObject(major)
+        })
+
+    } catch (err) {
+        console.error(err);
+        res.send('View error log at server console.');
+    }
+
+})
 
 
 router.get('/edit-info', async function (req, res) {
     try {
         if (req.query.text_search == undefined) {
+            console.log("đấkdjkad")
 
-            res.render('guest/students_edit_info')
+            res.render('admin/students_edit_info')
 
         }
         else {
@@ -216,7 +232,7 @@ router.get('/edit-info', async function (req, res) {
                         if (obj.GioiTinh == 1) obj.GioiTinh = 'Nam'
                         else obj.GioiTinh = 'Nữ'
                     })
-                    res.render('guest/students_edit_info', {
+                    res.render('admin/students_edit_info', {
                         list: students,
                         empty: students.length == 0
                     })
@@ -224,6 +240,27 @@ router.get('/edit-info', async function (req, res) {
         }
 
 
+
+    } catch (err) {
+        console.error(err);
+        res.send('View error log at server console.');
+    }
+
+})
+
+router.get('/search/:id', async function (req, res) {
+    id = req.params.id
+    try {
+        
+
+            student.findOne({ $text: { $search: id } })
+                .lean()
+                .exec(function (err, students) {
+                    if(!students)  res.json({mess:"MSSV không hợp lệ!"})
+                    else res.json({name: students.HoLot +' '+ students.Ten})
+
+                });
+        
 
     } catch (err) {
         console.error(err);
