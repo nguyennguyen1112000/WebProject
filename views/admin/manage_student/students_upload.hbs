@@ -1,0 +1,101 @@
+<div class="span9">
+    <div class="content">
+
+        <div class="btn-controls">
+            <div class="btn-box-row row-fluid">
+                <a href="/students/add" class="btn-box span3 bg-light">
+                    <i class="icon-arrow-up"></i>
+                    <b>Upload danh sách</b>
+                </a>
+                <a href="/students/add-new" class="btn-box span3">
+                    <i class="icon-user"></i>
+                    <b>Thêm sinh viên</b>
+                </a>
+                <a href="/students/find" class="btn-box span3">
+                    <i class="icon-search"></i>
+                    <b>Tìm kiếm sinh viên</b>
+                </a>
+                <a href="/students/edit-info" class="btn-box span3">
+                    <i class="icon-edit"></i>
+                    <b>Chỉnh sửa sinh viên</b>
+                </a>
+            </div>
+        </div>
+        <!--/.btn-controls-->
+
+
+        <div class="module scrollme">
+            <div class="module-head">
+                <h3>Upload danh sách sinh viên</h3>
+            </div>
+            <div class="module-body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    Chọn file danh sách sinh viên (*)
+                    <input type="file" name="file"> <br>
+                    <input type="submit" value="upload" class="btn btn-info">
+                </form>
+                <h5>{{msg}}</h5>
+
+            </div>
+            <div class="module-head">
+                <h3>Danh sách sinh viên</h3>
+            </div>
+
+            <div class="module-body table scrollme">
+                <table cellpadding="0" cellspacing="0" border="0"
+                    class="datatable-1 table table-bordered table-striped	 display" width="100%" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>MSSV</th>
+                            <th>Họ lót</th>
+                            <th>Tên</th>
+                            <th>Giới tính</th>
+                            <th>Ngày sinh</th>
+                            <th>Nơi sinh</th>
+                            <th>Lớp</th>
+                            <th>Ngành</th>
+                            <th>Email</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each list}}
+                        <tr class="odd gradeX">
+                            <td>{{Add @index 1}}</td>
+                            <td>{{MSSV}}</td>
+                            <td>{{HoLot}}</td>
+                            <td>{{Ten}}</td>
+                            <td> {{#ifCond GioiTinh 1}}
+                                Nam
+                                {{else}}
+                                Nữ
+                                {{/ifCond}} </td>
+                            <td>{{DateFormat NgaySinh}}</td>
+                            <td>{{NoiSinh}}</td>
+                            <td>{{Lop}}</td>
+                            <td>{{Nganh}}</td>
+                            <td>{{Email}}</td>
+                        </tr>
+                        {{/each}}
+
+                    </tbody>
+                </table>
+            </div>
+            {{#with file}}
+            <div class="module-foot">
+                <form action="/students/upload/save" method="post" id="frmSave">
+                    <input type="hidden" name="path" value="{{file_path}}">
+                    <button type="submit" class="btn btn-danger" id="btnSave">Thêm danh sách SV</button>
+                </form>
+            </div>
+            {{/with}}
+        </div>
+
+
+
+
+    </div>
+    <!--/.content-->
+</div>
+<!--/.span9-->

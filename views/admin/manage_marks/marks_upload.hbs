@@ -1,0 +1,131 @@
+{{#section 'footer'}}
+<script>
+
+
+    $(document).ready(function () {
+        $("#upload").submit(function (e) {
+            e.preventDefault()
+            var url = $(this).attr("action");
+            var request_method = $(this).attr("method");
+            $.ajax({
+                type: request_method,
+                url: url,
+                data: null,
+                success: function (data) {
+
+                }
+            });
+
+        })
+
+        $('#save_upload').click(function () {
+            btn_id = $(this).val()
+            form = $('#frm')
+            var url = '/marks/upload/' + $(this).data('whatever') + '?finish=1&update=1'
+            var request_method = "post"
+            var frmData = $("input[name='DiemTK']")
+                .map(function () { return $(this).val(); }).get();
+            frmData = { data: frmData }
+            $.ajax({
+                type: request_method,
+                url: url,
+                data: frmData,
+                success: function (data) {
+                    if (data.succ) {
+                        Swal.fire(
+                            'Thành công!',
+                            data.mess,
+                            'success'
+                        ).then(function () {
+                            $('table').load(location.href + ' table')
+
+                        })
+                    }
+                }
+            });
+        })
+    });
+
+</script>
+
+
+{{/section}}
+
+
+<div class="span9">
+    <div class="content">
+        <div class="btn-controls">
+            <div class="btn-box-row row-fluid">
+                <a href="/marks/list_bySubject" class="btn-box span3">
+                    <i class="icon-list"></i>
+                    <b>Điểm theo học phần</b>
+                </a>
+                <a href="/marks/list_byStudent" class="btn-box span3">
+                    <i class="icon-user"></i>
+                    <b>Điểm theo sinh viên</b>
+                </a>
+                <a href="/marks/upload" class="btn-box span3 bg-light">
+                    <i class="icon-arrow-up"></i>
+                    <b>Upload bảng điểm</b>
+                </a>
+                <a href="/marks/print" class="btn-box span3">
+                    <i class="icon-print"></i>
+                    <b>In bảng điểm</b>
+                </a>
+            </div>
+        </div>
+        {{#with list as |list|}}
+
+        <div class="module scrollme">
+            <div class="module-head">
+                <h3> <a href="/marks/upload">Upload bảng điểm</a> > {{list.MaHP}} </h3>
+            </div>
+            <div class="module-body">
+                <form action="/marks/upload/{{MaHP}}" method="post" enctype="multipart/form-data">
+                    Chọn file điểm (*)
+                    <input type="file" name="file"> <br>
+                    <input type="submit" value="upload" class="btn btn-default">
+                </form>
+            </div>
+            <div class="module-head">
+                <h3>Danh sách sinh viên</h3>
+            </div>
+            <div class="module-body table">
+                <table cellpadding="0" cellspacing="0" border="0"
+                    class="datatable-1 table table-bordered table-striped	 display" width="100%" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>MSSV</th>
+                            <th>Họ và tên</th>
+                            <th>Điểm TK</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each list.DSSinhVien}}
+                        <tr class="odd gradeX">
+                            <td>{{Add @index 1}}</td>
+                            <td>{{SinhVien.MSSV}}</td>
+                            <td>{{SinhVien.HoLot}} {{SinhVien.Ten}}</td>
+                            <td> <input placeholder="Nhập điểm" style="border: none;" type="text" name="DiemTK"
+                                    value="{{DiemTK}}"> </td>
+                            <td></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="module-foot">
+                <div class="control-group">
+                    <div class="controls">
+                        <button id="save_upload" type="submit" data-whatever="{{list.MaHP}}" class="btn btn-info">Lưu
+                            điểm <i class="icon-save"></i></button>
+                        <a href="/marks/upload/{{list.MaHP}}" class="btn btn-danger">Hủy </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/with}}
+    </div>
+</div>

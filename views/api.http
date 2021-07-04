@@ -1,0 +1,41 @@
+POST http://localhost:4000/subjects/add HTTP/1.1
+content-type: application/json
+
+{
+ "MaDKHP": "HK1_2020_2021",
+ "MonHoc": "60d6fed7604b992208344954",
+  "MaHP": "CSDL21",
+ "TenHP": "Cơ sở dữ liệu",
+  "GVLyThuyet": "60897cd627376b4f1013633c",
+  "GVThucHanh": "60897cd627376b4f1013633c",
+  "LichHoc": "T2(1-4)",
+  "LichHocTH":["T3(1-3)","T2(3-5)"],
+  "SoNhomTH": 2,
+ "HocKi": 1,
+ "SoSVToiDa": 15,
+  "SoSVToiThieu": 0,
+  "NgayBatDau": "01/01/2021",
+  "NgayKetThuc":"06/30/2021"
+}
+###
+POST http://localhost:3000/submit/subject/HK1_2020_2021 HTTP/1.1
+content-type: application/json
+
+{
+  "CTDLGT21": [ "2", "CTDLGT21" ],
+  "CSDL21": "CSDL21" ,
+  "CNPM21": [ "1", "CNPM21" ],
+  "HDH21": [ "1", "HDH21" ],
+  "MMT21": [ "1", "MMT21" ],
+  "TKPM21": ["1", "TKPM21" ]
+}
+###
+###
+POST http://localhost:3000/login/student HTTP/1.1
+content-type: application/json
+
+{
+  "TenDangNhap": "18120486",
+  "MatKhau": "1234" ,
+  
+}

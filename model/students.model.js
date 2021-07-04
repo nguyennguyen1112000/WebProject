@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 var slug = require('mongoose-slug-generator');
 mongoose.plugin(slug);
-const Subject=require('../model/subjects.model')
-const Major = require('../model/major.model')
 
 const Student = new Schema({
     MSSV: { type: String },
@@ -15,6 +13,7 @@ const Student = new Schema({
     Lop: { type: String },
     Nganh: { type: Schema.Types.ObjectId,ref:'Major'},
     Email: { type: String },
+    LuuTru:{type:[{ThoiGianBatDau: Date, DiaChi:String}]},
     HPTichLuy: { type: [{HocPhan:{type:Schema.Types.ObjectId,ref:'Subject'},DiemTK: Number }]},
     slug: { type: String, slug: 'MSSV', unique:true }
 },

@@ -7,6 +7,13 @@
 			"problemMatcher": [],
 			"label": "npm: install",
 			"detail": "install dependencies from package"
+		},
+		{
+			"type": "npm",
+			"script": "start1",
+			"problemMatcher": [],
+			"label": "npm: start1",
+			"detail": "node server.js"
 		}
 	]
 }

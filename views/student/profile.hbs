@@ -1,0 +1,118 @@
+{{#section 'footer'}}
+
+<script>
+
+    $(document).ready(function () {
+        $('#majors').change(function () {
+            $("#specialities").append("<option value='" + '123' + "'>" + 'nguyen' + "</option>");
+            $.ajax({
+                type: 'post',
+                url: '/modules/byMajor',
+                data: { Nganh: $(this).val() },
+                success: function (data) {
+                    $("#specialities").empty()
+                    $('#specialities').append(`<option value="">Không</option>`)
+                    for (var i = 0; i < data.length; i++) {
+                        var id = data[i]['_id']
+                        var ChuyenNganh = data[i]['ChuyenNganh']
+                        $('#specialities').append(`<option value="${id}">${ChuyenNganh}</option>`);
+                    }
+                }
+            });
+        });
+
+        $("form").submit(function (e) {
+            e.preventDefault()
+            var url = $(this).attr("action");
+            var request_method = $(this).attr("method")
+            frmData = $(this).serialize()
+            $.ajax({
+                type: request_method,
+                url: url,
+                data: frmData,
+                success: function (data) {
+
+                    Swal.fire(
+                        'Thêm môn học thành công',
+                        '',
+                        'success'
+                    )
+                        .then(function () {
+                            location.reload(true)
+
+                        })
+
+                }
+            });
+
+        })
+    });
+</script>
+
+{{/section}}
+
+<div class="span9">
+    <div class="content">
+        <div class="module">
+            <div class="module-head">
+                <h3>Thông tin Nguyễn Bình Nguyên</h3>
+            </div>
+            <div class="module-body form-horizontal row-fluid">
+
+                <div class="control-group">
+                    <label class="control-label">Họ và tên </label>
+                    <div class="controls">
+                        <input type="text" value="Nguyễn Bình Nguyên" class="span8" readonly>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">MSSV </label>
+                    <div class="controls">
+                        <input type="text" value="18120486" class="span8" readonly>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Ngành</label>
+                    <div class="controls">
+                        <input type="text" value="Công nghệ thông tin" class="span8" readonly>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Chuyên ngành</label>
+                    <div class="controls">
+                        <input type="text" value="Kỹ thuật phần mềm" class="span8" readonly>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Ngày sinh</label>
+                    <div class="controls">
+                        <input type="text" value="11/01/2000" class="span8" readonly>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Nơi sinh </label>
+                    <div class="controls">
+                        <input type="text" value="Đắk Lắk" class="span8" readonly>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Giới tính </label>
+                    <div class="controls">
+                        <input type="text" value="Nam" class="span8" readonly>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Email</label>
+                    <div class="controls">
+                        <input type="text" value="nguyennguyen1112000@gmail.com" class="span8" readonly>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--/.content-->
+</div>
+<!--/.span9-->

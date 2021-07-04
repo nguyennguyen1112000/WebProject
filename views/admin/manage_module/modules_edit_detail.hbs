@@ -1,0 +1,188 @@
+{{#section 'footer'}}
+
+<script>
+
+    $(document).ready(function () {
+        $('#majors').change(function () {
+            $("#specialities").append("<option value='" + '123' + "'>" + 'nguyen' + "</option>");
+            $.ajax({
+                type: 'post',
+                url: '/modules/byMajor',
+                data: { Nganh: $(this).val() },
+                success: function (data) {
+                    $("#specialities").empty()
+                    $('#specialities').append(`<option value="">Không</option>`)
+                    for (var i = 0; i < data.length; i++) {
+                        var id = data[i]['_id']
+                        var ChuyenNganh = data[i]['ChuyenNganh']
+
+                        $('#specialities').append(`<option value="${id}">${ChuyenNganh}</option>`);
+                    }
+
+                }
+            });
+        });
+
+        $("form").submit(function (e) {
+            e.preventDefault()
+            var url = $(this).attr("action");
+            var request_method = $(this).attr("method")
+            frmData = $(this).serialize()
+            $.ajax({
+                type: request_method,
+                url: url,
+                data: frmData,
+                success: function (data) {
+
+                    Swal.fire(
+                        data.succ,
+                        '',
+                        'success'
+                    )
+                        .then(function () {
+                            location.reload(true)
+
+                        })
+                }
+            });
+
+        })
+    });
+</script>
+
+{{/section}}
+
+<div class="span9">
+    <div class="content">
+        <div class="btn-controls">
+            <div class="btn-box-row row-fluid">
+                <a href="/modules/list" class="btn-box span4">
+                    <i class="icon-list"></i>
+                    <b>Danh sách môn học</b>
+                </a>
+                <a href="/modules/add" class="btn-box span4">
+                    <i class="icon-plus"></i>
+                    <b>Thêm môn học</b>
+                </a>
+                <a href="/modules/edit" class="btn-box span4 bg-light">
+                    <i class="icon-edit"></i>
+                    <b>Chỉnh sửa môn học</b>
+                </a>
+            </div>
+        </div>
+        {{#with detail as |detail|}}
+
+        <div class="module">
+            <div class="module-head">
+                <h3><a href="/modules/edit">Chỉnh sửa môn học</a> > {{MonHoc}} </h3>
+            </div>
+
+            <div class="module-body">
+                <form class="form-horizontal row-fluid" action="/modules/edit/{{MaMonHoc}}" method="post">
+                    <div class="control-group">
+                        <label class="control-label">Thuộc ngành</label>
+                        <div class="controls">
+                            <select tabindex="1" data-placeholder="Chọn chuyên ngành" class="span8" id="majors"
+                                name="Nganh">
+                                {{#each ../Majors as |major|}}
+                                <option value="{{_id}}" {{#ifEID major._id detail.Nganh._id}} selected="" {{/ifEID}}>
+                                    {{TenNganh}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Chuyên ngành</label>
+                        <div class="controls">
+                            <select tabindex="1" data-placeholder="Chọn chuyên ngành" class="span8" name="ChuyenNganh"
+                                id="specialities">
+                                <option value="" selected>
+                                    Không</option>
+                                {{#each ../Specicalities as |speciality|}}
+                                <option value="{{_id}}" {{#ifEID speciality._id detail.ChuyenNganh._id}} selected=""
+                                    {{/ifEID}}>
+                                    {{ChuyenNganh}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="MaMonHoc">Mã môn học</label>
+                        <div class="controls">
+                            <input type="text" id="MaMonHoc" value="{{MaMonHoc}}" name="MaMonHoc" class="span8"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Tên môn học</label>
+                        <div class="controls">
+                            <input type="text" id="TenMonHoc" value="{{MonHoc}}" class="span8" required name="MonHoc">
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="control-group">
+                        <label class="control-label" for="SoTC">Số tín chỉ</label>
+                        <div class="controls">
+                            <div class="input-append">
+                                <input type="number" value="{{SoTC}}" class="span8" min="1" max="10" name="SoTC"><span
+                                    class="add-on">TC</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Số giờ tín chỉ</label>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">Lý thuyết</span><input class="span3" type="number"
+                                    value="{{SoGioTC.LyThuyet}}" id="LyThuyet" min="0" name="LyThuyet">
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="controls">
+
+                            <div class="input-prepend">
+                                <span class="add-on">Thực hành</span><input class="span3" type="number"
+                                    value="{{SoGioTC.ThucHanh}}" id="ThucHanh" min="0" name="ThucHanh">
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="controls">
+
+                            <div class="input-prepend">
+                                <span class="add-on">Tự học</span><input class="span3" type="number"
+                                    value="{{SoGioTC.TuHoc}}" id="TuHoc" min="0" name="TuHoc">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="basicinput">Môn tiên quyết</label>
+                        <div class="controls">
+                            <select tabindex="1" value="{{TenTienQuyet}}" class="span8" name="MonTienQuyet">
+                                <option value="">Không</option>
+                                {{#each list}}
+                                <option value="{{MaMonHoc}}">{{MonHoc}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn btn-info">Cập nhật</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {{/with}}
+
+        </div>
+    </div>
+</div>

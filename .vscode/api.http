@@ -1,0 +1,11 @@
+POST http://localhost:4000/admin/profile HTTP/1.1
+content-type: application/json
+
+{
+    "TenDangNhap": "admin01",
+    "MatKhau": "$2b$10$RW2bAE8Lexsq5SgWevT6GOGeGdNc5noNfkMMHFycpo9sU0VQwJKaO",
+    "NgaySinh": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+
+###
+GET http://localhost:4000/admin/profile HTTP/1.1

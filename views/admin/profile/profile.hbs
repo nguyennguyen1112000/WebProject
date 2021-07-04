@@ -1,0 +1,64 @@
+{{#section 'footer'}}
+
+{{/section}}
+
+<div class="span9">
+    <div class="content">
+      
+        <div class="module">
+            <div class="module-head">
+                <h3>Thông tin tài khoản</h3>
+            </div>
+            <div class="module-body">
+                <form class="form-horizontal row-fluid" action="/subjects/add" method="post">
+                <div class="control-group">
+                        <div class="controls user">
+                           <img class="avatar" src="{{adminAcc.AnhDaiDien}}" alt="Ảnh đại diện">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Họ và tên</label>
+                        <div class="controls">
+                           {{adminAcc.HoTen}}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Email</label>
+
+                        <div class="controls">
+                           {{adminAcc.Email}}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Giới tính</label>
+
+                        <div class="controls">
+                           {{#ifCond adminAcc.GioiTinh true }}
+                                Name
+                            {{else}}
+                                Nữ
+                           {{/ifCond}}
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Chức vụ</label>
+                        <div class="controls">
+                            {{adminAcc.ChucVu}}
+                        </div>
+                    </div>
+                    <div class="control-group" id="wrapper1">
+                        <label class="control-label">Ngày sinh</label>
+
+                        <div class="controls">
+                            {{adminAcc.NgaySinh}}
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.content-->
+</div>
+<!--/.span9-->

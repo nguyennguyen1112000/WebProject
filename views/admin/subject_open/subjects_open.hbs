@@ -12,7 +12,6 @@
         });
 
         var a = $("#HocPhanMo").html();
-        console.log(a)
         var max_fields = 10; //maximum input boxes allowed
         var wrapper = $("#wrapper1"); //Fields wrapper
         var add_button = $(".add_Subject"); //Add button ID
@@ -43,7 +42,6 @@
         //Kiểm tra
         function doneTyping(val) {
             $.getJSON(`/subjects/register/search/${val}`, function (data) {
-                console.log(data)
                 if (data.err) $('.mess').html(data.err)
 
 

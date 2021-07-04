@@ -1,0 +1,167 @@
+{{#section 'footer'}}
+
+<script>
+
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+
+        });
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
+
+    });
+</script>
+<script>
+    $('input[type="checkbox"]').click(function () {
+        const id = $(this).attr('id');
+        const count = $(`input[name=${id}]`).length;
+        if ($(this).is(":checked")) {
+            if (count !== 1) {
+                $(`#${id}0`).prop("checked", true);
+            }
+        }
+        else if ($(this).is(":not(:checked)")) {
+            if (count !== 1) {
+                for (let i = 0; i < count - 1; i++) {
+                    $(`#${id}${i}`).prop("checked", false);
+                }
+            }
+        }
+    });
+</script>
+
+{{/section}}
+
+{{#with detail}}
+<div class="span9">
+    <div class="content">
+        <div id="app"></div>
+
+        <div class="module message">
+            <div class="module-head">
+                <h3>
+                    Danh sách học phần đã đăng ký</h3>
+            </div>
+
+            <div class="module-body table">
+                <table class="table table-message">
+                    <tbody>
+                        <tr class="heading">
+                            <td>STT</td>
+                            <td>Mã HP</td>
+                            <td>Tên HP</td>
+                            <td>Số TC</td>
+                            <td>Giảng viên</td>
+                            <td>Lịch học</td>
+                            <td>Số SV</td>
+                            <td>Hủy</td>
+                        </tr>
+                        {{#each ../subjects as |list|}}
+                        <tr class="read">
+
+                            <td>{{Add @index 1}}</td>
+                            <td>{{MaHP}}</td>
+                            <td>{{TenHP}}</td>
+                            <td>{{MonHoc.SoTC}}</td>
+                            <td>{{#each GVLyThuyet}}
+                                {{TenGV}} <br>
+                                {{/each}}
+                                {{#each GVThucHanh}}
+                                {{TenGV}}
+                                <br>
+                                {{/each}}
+                            </td>
+                            <td>Lý thuyết: {{LichHoc}} <br>
+                                {{#each DSSinhVien}}
+                                {{#ifEID SinhVien._id ../../../studentAcc.SinhVien}}
+                                Thực hành: Nhóm {{Nhom}}
+
+                                {{/ifEID}}
+                                {{/each}}</td>
+                            <td>{{countArray DSSinhVien}}/{{SoSVToiDa}}</td>
+                            <td><button type="submit" class="btn btn-default"><i class="icon-trash"></i></button></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="module-foot">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="span12">
+    <div class="content">
+        <div class="module message">
+            <div class="module-head">
+                <h3>
+                    Danh sách học phần mở</h3>
+            </div>
+            <form action="" method="post">
+
+                <div class="module-body table">
+                    <table class="table table-message">
+                        <tbody>
+                            <tr class="heading">
+                                <td>STT</td>
+                                <td>Mã HP</td>
+                                <td>Tên HP</td>
+                                <td>NH/HK</td>
+                                <td>Số TC</td>
+                                <td>Giảng viên</td>
+                                <td>Lịch học</td>
+                                <td>Nhóm thực hành</td>
+                                <td>Số SV</td>
+                                <td>Đăng ký</td>
+                            </tr>
+                            {{#each ../list as |list|}}
+                            <tr class="unread">
+
+                                <td>{{Add @index 1}}</td>
+                                <td>{{MaHP}}</td>
+                                <td>{{TenHP}}</td>
+                                <td>{{NamHoc NgayBatDau NgayKetThuc HocKi}}/{{HocKi}}</td>
+                                <td>{{MonHoc.SoTC}}</td>
+                                <td>{{#each GVLyThuyet}}
+                                    {{TenGV}} <br>
+                                    {{/each}}
+                                    {{#each GVThucHanh}}
+                                    {{TenGV}}
+                                    <br>
+                                    {{/each}}
+                                </td>
+                                <td>{{LichHoc}}</td>
+                                <td>{{#each LichHocTH}}
+                                    <input type="radio" id="{{list.MaHP}}{{@index}}" name="{{list.MaHP}}"
+                                        value="{{Add @index 1}}">
+                                    <label for="LichHocTH{{list.MaHP}}">Nhóm {{Add @index 1}} {{ThoiGian}}</label>
+                                    <br>
+                                    {{/each}}
+                                </td>
+                                <td>{{countArray DSSinhVien}}/{{SoSVToiDa}}</td>
+                                <td><input type="checkbox" id="{{list.MaHP}}" name="{{list.MaHP}}"
+                                        value="{{list.MaHP}}">
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="module-footer text" style="text-align: center;">
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn btn-large btn-info center">Đăng ký</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--/.content-->
+</div>
+{{/with}}

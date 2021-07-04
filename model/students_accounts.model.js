@@ -5,6 +5,7 @@ mongoose.plugin(slug);
 
 const Student_Account = new Schema({
     SinhVien: { type: Schema.Types.ObjectId,ref:'Student'},
+    MSSV: {type:String},
     MatKhau: { type: String },
     TrangThai: { type: Boolean }
 },

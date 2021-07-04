@@ -1,0 +1,37 @@
+<div class="span9">
+    <div class="content">
+        <div class="module message">
+            <div class="module-head">
+                <h3>
+                    Đăng ký học phần</h3>
+            </div>
+
+            <div class="module-body">
+                {{#if empty}}
+                <div class="control-group">
+                    <h5 class="bold-red">Chưa có đợt đăng ký học phần</h5>
+                </div>
+                {{/if}}
+                {{#with detail}}
+                <div class="control-group">
+                    <ol>
+                        <li> <strong>Học kì: {{HocKi}}</strong> </li>
+                        <li><strong>Ngày bắt đầu học kì:</strong> {{DateFormat NgayBatDauHK}}</li>
+                        <li><strong>Ngày kết thúc HK (dự kiến):</strong> {{DateFormat NgayKetThucHK}} </li>
+                        <li><strong>Thời gian bắt đầu đăng kí: </strong> {{TimeFormat ThoiGianBD}}</li>
+                        <li> <strong>Thời gian kết thúc đăng kí:</strong> {{TimeFormat ThoiGianKT}} </li>
+                    </ol>
+                    <div>
+                        <a href="/submit/subject/{{MaDKHP}}" class="btn btn-large btn-info">
+                            <i class="icon-arrow-right"></i>
+                            <b>Đăng ký học phần</b>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{{/with}}

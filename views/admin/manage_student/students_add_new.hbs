@@ -1,0 +1,175 @@
+{{#section 'footer'}}
+<script>
+    $("#NgaySinh").datepicker({ dateFormat: 'dd/mm/yy' });
+</script>
+<script>
+
+    $(document).ready(function () {
+        $("form").submit(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("action");
+            var request_method = $(this).attr("method")
+            frmData = $(this).serialize()
+            $.ajax({
+                type: request_method,
+                url: url,
+                data: frmData,
+                success: function (data) {
+                    if (data.succ) {
+                        Swal.fire(
+                            'Thêm sinh viên',
+                            data.succ,
+                            'success'
+                        )
+                            .then(function () {
+                                location.reload(true)
+
+                            })
+
+                    }
+
+                    else {
+                        Swal.fire(
+                            'Thêm sinh viên',
+                            data.err,
+                            'warning'
+                        )
+                    }
+
+                }
+            });
+
+        })
+    })
+</script>
+{{/section}}
+
+
+
+<div class="span9">
+    <div class="content">
+        <div class="btn-controls">
+            <div class="btn-box-row row-fluid">
+                <a href="/students/upload" class="btn-box span3">
+                    <i class="icon-arrow-up"></i>
+                    <b>Upload danh sách</b>
+                </a>
+                <a href="/students/add-new" class="btn-box span3 bg-light">
+                    <i class="icon-user"></i>
+                    <b>Thêm sinh viên</b>
+                </a>
+                <a href="/students/find" class="btn-box span3">
+                    <i class="icon-search"></i>
+                    <b>Tìm kiếm sinh viên</b>
+                </a>
+                <a href="/students/edit-info" class="btn-box span3">
+                    <i class="icon-edit"></i>
+                    <b>Chỉnh sửa sinh viên</b>
+                </a>
+            </div>
+        </div>
+        <div class="module message">
+            <div class="module-head">
+                <h3>Thêm sinh viên</h3>
+            </div>
+            <form action="/students/add-new" method="POST" class="form-horizontal row-fluid"
+                enctype="application/x-www-form-urlencoded">
+                <div class="module-body">
+                    <div class="control-group">
+                        <label class="control-label" for="MSSV">Mã số sinh viên</label>
+                        <div class="controls">
+                            <input type="text" name="MSSV" placeholder="Nhập mã số sinh viên..." class="span8" required>
+                            <span class="help-inline">(*)</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="HoLot">Họ lót</label>
+                        <div class="controls">
+                            <input type="text" name="HoLot" placeholder="Nhập họ và tên lót sinh viên" class="span8"
+                                required>
+                            <span class="help-inline">(*)</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="Ten">Tên</label>
+                        <div class="controls">
+                            <input type="text" name="Ten" placeholder="Nhập tên sinh viên" class="span8" required>
+                            <span class="help-inline">(*)</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="NgaySinh">Ngày sinh</label>
+                        <div class="controls">
+                            <input type="text" name="NgaySinh" id="NgaySinh" required>
+                            <span class="help-inline">(*)</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="Email">Email</label>
+                        <div class="controls">
+                            <input type="email" name="Email" placeholder="Nhập Email" class="span8" required>
+                            <span class="help-inline">(*)</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="Lop">Lớp</label>
+                        <div class="controls">
+                            <input type="text" id="Lop" placeholder="Nhập tên lớp" name="Lop" class="span8" required>
+                            <span class="help-inline">(*)</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="NoiSinh">Nơi sinh</label>
+                        <div class="controls">
+                            <select tabindex="1" data-placeholder="Chọn nơi sinh" class="span8" name="NoiSinh">
+                                {{#each provinces}}
+                                <option value="{{province}}">{{province}}</option>
+                                {{/each}}
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="Nganh">Ngành học</label>
+                        <div class="controls">
+                            <select tabindex="1" class="span8" name="Nganh">
+                                {{#each majors}}
+                                <option value="{{_id}}">{{TenNganh}}</option>
+
+                                {{/each}}
+
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="control-group">
+                        <label class="control-label">Giới tính</label>
+                        <div class="controls">
+                            <label class="radio inline">
+                                <input type="radio" name="GioiTinh" id="Nam" value="1" checked="">
+                                Nam
+                            </label>
+                            <label class="radio inline">
+                                <input type="radio" name="GioiTinh" id="Nu" value="0">
+                                Nữ
+                            </label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="module-foot">
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn btn-info">Thêm sinh viên</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

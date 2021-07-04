@@ -1,0 +1,179 @@
+{{#section 'footer'}}
+
+<script>
+
+    $(document).ready(function () {
+        $('#majors').change(function () {
+            $("#specialities").append("<option value='" + '123' + "'>" + 'nguyen' + "</option>");
+            $.ajax({
+                type: 'post',
+                url: '/modules/byMajor',
+                data: { Nganh: $(this).val() },
+                success: function (data) {
+                    $("#specialities").empty()
+                    $('#specialities').append(`<option value="">Không</option>`)
+                    for (var i = 0; i < data.length; i++) {
+                        var id = data[i]['_id']
+                        var ChuyenNganh = data[i]['ChuyenNganh']
+                        $('#specialities').append(`<option value="${id}">${ChuyenNganh}</option>`);
+                    }
+                }
+            });
+        });
+
+        $("form").submit(function (e) {
+            e.preventDefault()
+            var url = $(this).attr("action");
+            var request_method = $(this).attr("method")
+            frmData = $(this).serialize()
+            $.ajax({
+                type: request_method,
+                url: url,
+                data: frmData,
+                success: function (data) {
+
+                    Swal.fire(
+                        'Thêm môn học thành công',
+                        '',
+                        'success'
+                    )
+                        .then(function () {
+                            location.reload(true)
+
+                        })
+
+                }
+            });
+
+        })
+    });
+</script>
+
+{{/section}}
+
+<div class="span9">
+    <div class="content">
+        <div class="btn-controls">
+            <div class="btn-box-row row-fluid">
+                <a href="/modules/list" class="btn-box span4">
+                    <i class="icon-list"></i>
+                    <b>Danh sách môn học</b>
+                </a>
+                <a href="/modules/add" class="btn-box span4 bg-light">
+                    <i class="icon-plus"></i>
+                    <b>Thêm môn học</b>
+                </a>
+                <a href="/modules/edit" class="btn-box span4">
+                    <i class="icon-edit"></i>
+                    <b>Chỉnh sửa môn học</b>
+                </a>
+            </div>
+        </div>
+
+        <div class="module">
+            <div class="module-head">
+                <h3>Thêm môn học</h3>
+            </div>
+            <div class="module-body">
+                <form class="form-horizontal row-fluid" action="/modules/add" method="post">
+                    <div class="control-group">
+                        <label class="control-label">Thuộc ngành</label>
+                        <div class="controls">
+                            <select tabindex="1" data-placeholder="Chọn chuyên ngành" class="span8" id="majors"
+                                name="Nganh">
+                                {{#each Majors}}
+                                <option value="{{_id}}">{{TenNganh}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Chuyên ngành</label>
+                        <div class="controls">
+                            <select tabindex="1" data-placeholder="Chọn chuyên ngành" class="span8" name="ChuyenNganh"
+                                id="specialities">
+                                <option value="">Không</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="MaMonHoc">Mã môn học</label>
+                        <div class="controls">
+                            <input type="text" id="MaMonHoc" placeholder="Nhập mã môn học" name="MaMonHoc" class="span8"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="TenMonHoc">Tên môn học</label>
+                        <div class="controls">
+                            <input type="text" id="TenMonHoc" placeholder="Nhập tên môn học" class="span8" required
+                                name="MonHoc">
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="control-group">
+                        <label class="control-label" for="SoTC">Số tín chỉ</label>
+                        <div class="controls">
+                            <div class="input-append">
+                                <input type="number" value="1" class="span8" min="1" max="10" name="SoTC"><span
+                                    class="add-on">TC</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Số giờ tín chỉ</label>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">Lý thuyết</span><input class="span3" type="number" value="0"
+                                    id="LyThuyet" min="0" name="LyThuyet">
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="controls">
+
+                            <div class="input-prepend">
+                                <span class="add-on">Thực hành</span><input class="span3" type="number" value="0"
+                                    id="ThucHanh" min="0" name="ThucHanh">
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="controls">
+
+                            <div class="input-prepend">
+                                <span class="add-on">Tự học</span><input class="span3" type="number" value="0"
+                                    id="TuHoc" min="0" name="TuHoc">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="basicinput">Môn tiên quyết</label>
+                        <div class="controls">
+                            <select tabindex="1" data-placeholder="Chọn môn học" class="span8" name="MonTienQuyet">
+                                <option value="">Không</option>
+                                {{#each list}}
+                                <option value="{{MaMonHoc}}">{{MonHoc}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn btn-info">Thêm môn học</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/.content-->
+</div>
+<!--/.span9-->

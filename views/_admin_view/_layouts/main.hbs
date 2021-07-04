@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Quản lý sinh viên</title>
+	<link type="text/css" href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link type="text/css" href="/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+	<link type="text/css" href="/css/theme.css" rel="stylesheet">
+
+	<link type="text/css" href="/images/icons/css/font-awesome.css" rel="stylesheet">
+	<link type="text/css" href="/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600'
+		rel='stylesheet'>
+	<link rel="stylesheet" href="/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/css/datatable.css">
+	<link rel="stylesheet" type="text/css" href="/css/pe-icon-7-stroke/css/pe-icon-7-stroke.css">
+	<link rel="stylesheet" type="text/css" href="/css/pe-icon-7-stroke/css/helper.css">
+
+
+
+</head>
+
+<body>
+	{{> header}}
+	<div class="wrapper">
+		<div class="container">
+			<div class="row">
+				<div class="span3">
+					<div class="sidebar">
+						<ul class="widget widget-menu unstyled">
+							<li><a href="/students/upload"><i class="menu-icon icon-dashboard"></i>Quản lý thông tin
+									sinh
+									viên
+								</a></li>
+							<li><a href="/modules/list"><i class="menu-icon icon-bullhorn"></i>Quản lý thông tin môn
+									học</a>
+							</li>
+							<li><a href="/subjects/list"><i class="menu-icon icon-book"></i>Quản lý thông tin học phần
+								</a></li>
+							<li><a href="/marks/list_bySubject"><i class="menu-icon icon-tasks"></i>Quản lý điểm </a>
+							</li>
+						</ul>
+
+						<ul class="widget widget-menu unstyled">
+							<li><a href="/subjects/open/list"><i class="menu-icon icon-bold"></i> Quản lý ĐKHP</a></li>
+							<li><a href="/accounts"><i class="menu-icon icon-bold"></i> Quản lý tài khoản</a></li>
+							<li><a href="javascript:logout()"><i class="menu-icon icon-signout"></i>Đăng xuất</a></li>
+						</ul>
+					</div>
+				</div>
+				{{{body}}}
+
+			</div>
+		</div>
+	</div>
+
+	<!--End main body-->
+
+	{{> footer}}
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.js"></script>
+	<script src="/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+	<script src="/scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+	<script src="/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+
+	<script>
+		function logout() {
+			$('.frm-out').submit()
+		}
+	</script>
+
+	<script>
+		$('#myTable').DataTable({
+
+		});
+		$("#myInput").on("keyup", function () {
+			var value = $(this).val().toLowerCase();
+			$("#myTable tr").filter(function () {
+				$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+			});
+		});
+	</script>
+
+	{{{_sections.footer}}}
+</body>
+
+
+
+
+</html>

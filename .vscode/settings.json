@@ -2,5 +2,6 @@
     "[git-rebase]": {
     
         "workbench.editor.restoreViewState": false
-    }
+    },
+    "git.ignoreLimitWarning": true
 }
