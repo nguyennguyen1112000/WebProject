@@ -56,12 +56,6 @@ router.post("/student", async function (req, res) {
   }
 });
 
-router.post("/out", async function (req, res) {
-  req.session.admin = false;
-  req.session.adminAcc = undefined;
-  res.render("guest/login", { layout: false });
-});
-
 router.post("/admin", async function (req, res) {
   try {
     const { TenDangNhap, MatKhau } = req.body;
@@ -80,5 +74,16 @@ router.post("/admin", async function (req, res) {
     console.error(err);
     res.send("View error log at server console.");
   }
+});
+router.post("/out", async function (req, res) {
+  req.session.admin = false;
+  req.session.adminAcc = undefined;
+  res.render("guest/login", { layout: false });
+});
+router.post("/student/out", async function (req, res) {
+  console.log(123)
+  req.session.student = false;
+  req.session.studentAcc = undefined;
+  res.render("student/login", { layout: false });
 });
 module.exports = router;

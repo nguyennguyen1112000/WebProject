@@ -2,6 +2,7 @@ class SubjectService {
   constructor() {
     this.subjectsModel = require("../model/subjects.model");
     this.studentService = new (require("../utils/student.service"))();
+    this.moduleService = new (require("../utils/module.service"))();
   }
   async all() {
     return await this.subjectsModel
@@ -20,6 +21,13 @@ class SubjectService {
         { path: "MonHoc" },
         { path: "GVLyThuyet" },
         { path: "GVThucHanh" },
+        { path: "DSSinhVien.SinhVien" },
+      ]);
+  }
+  async byId(id) {
+    return await this.subjectsModel
+      .findById(id)
+      .populate([
         { path: "DSSinhVien.SinhVien" },
       ]);
   }
@@ -112,6 +120,42 @@ class SubjectService {
       }
     });
     return contain;
+  }
+  async inSameModule(subjectId1, subjectId2) {
+    const module1 = await this.subjectsModel
+      .findById(subjectId1)
+      .populate([{ path: "MonHoc" }]);
+    const moduleId1 = module1.MonHoc._id;
+    const module2 = await this.subjectsModel
+      .findById(subjectId2)
+      .populate([{ path: "MonHoc" }]);
+    const moduleId2 = module2.MonHoc._id;
+    //console.log(moduleId1,moduleId2);
+    return moduleId1.equals(moduleId2);
+  }
+  async passPreviousModule(studentId, subject) {
+    const previousModuleId = subject.MonHoc.MonTienQuyet;
+    if (previousModuleId == "") return true;
+    const list = await this.studentService.education(studentId, undefined);
+    for (let i = 0; i < list.length; i++) {
+      const moduleId = list[i].HocPhan.MonHoc.MaMonHoc;
+      if (moduleId === previousModuleId && list[i].DiemTK >= 5) return true;
+    }
+    return false;
+  }
+  async forbiddenSubject(subject, studentId) {
+    const subjectId = subject._id;
+    var check = false;
+    const list = await this.studentService.education(studentId, undefined);
+    const result = await Promise.all(
+      list.map(async (obj) => {
+        return (
+          (await this.inSameModule(obj.HocPhan._id, subjectId)) &&
+          obj.DiemTK >= 5
+        );
+      })
+    );
+    return result.includes(true);
   }
 }
 module.exports = SubjectService;

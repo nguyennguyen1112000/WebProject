@@ -17,16 +17,19 @@ class ModuleService {
       { path: "ChuyenNganh" },
     ]);
   }
+  async byId(id) {
+    return await this.ModulesModel.findById(id);
+  }
   async patch(condition, update) {
     const to_update = await this.detail(condition);
     to_update.overwrite(update);
     await to_update.save();
   }
-  async add(module){
+  async add(module) {
     await this.ModulesModel.create(module);
   }
-  async delete(condition){
-      await this.ModulesModel.deleteOne(condition);
+  async delete(condition) {
+    await this.ModulesModel.deleteOne(condition);
   }
 }
 module.exports = ModuleService;

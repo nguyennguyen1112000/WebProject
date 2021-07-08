@@ -13,7 +13,7 @@ const Student = new Schema({
     Lop: { type: String },
     Nganh: { type: Schema.Types.ObjectId,ref:'Major'},
     Email: { type: String },
-    LuuTru:{type:[{ThoiGianBatDau: Date, DiaChi:String}]},
+    LuuTru:{type:[{ThoiGianBD: Date,ThoiGianKT:Date, DiaChi:String, GhiChu:String}]},
     HPTichLuy: { type: [{HocPhan:{type:Schema.Types.ObjectId,ref:'Subject'},DiemTK: Number }]},
     slug: { type: String, slug: 'MSSV', unique:true }
 },

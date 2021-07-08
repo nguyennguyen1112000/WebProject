@@ -15,7 +15,12 @@ const SubjectService = require("../../utils/subject.service");
 const subjectService = new SubjectService();
 router.get("/", async function (req, res) {
   try {
-    res.render("student/profile");
+    const student = await studentService.findById(
+      req.session.studentAcc.SinhVien
+    );
+    res.render("student/profile", {
+      detail: singleMongooseToObject(student),
+    });
   } catch (err) {
     console.error(err);
     res.send("View error log at server console.");
@@ -23,7 +28,44 @@ router.get("/", async function (req, res) {
 });
 router.get("/residence", async function (req, res) {
   try {
-    res.render("student/residence");
+    const results = await studentService.allResidence(
+      req.session.studentAcc.SinhVien
+    );
+    res.render("student/residence", {
+      list: mutipleMongooseToObject(results),
+    });
+  } catch (err) {
+    console.error(err);
+    res.send("View error log at server console.");
+  }
+});
+router.post("/residence", async function (req, res) {
+  try {
+    const id = req.session.studentAcc.SinhVien;
+    await studentService.addResidence(id,req.body);
+    res.json({ success: "Thêm lưu trú thành công" });
+  } catch (err) {
+    console.error(err);
+    res.send("View error log at server console.");
+  }
+});
+router.post("/residence/update/:index", async function (req, res) {
+  try {
+    const index = req.params.index;
+    const id = req.session.studentAcc.SinhVien;
+    await studentService.updateResidence(id,req.body,index);
+    res.json({success: "Cập nhật thành công"});
+  } catch (err) {
+    console.error(err);
+    res.send("View error log at server console.");
+  }
+});
+router.post("/residence/delete/:index", async function (req, res) {
+  try {
+    const index = req.params.index;
+    const id = req.session.studentAcc.SinhVien;
+    await studentService.deleteResidence(id,index);
+    res.json({ success: "Xóa thành công" });
   } catch (err) {
     console.error(err);
     res.send("View error log at server console.");

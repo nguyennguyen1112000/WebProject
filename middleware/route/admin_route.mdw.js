@@ -13,6 +13,6 @@ module.exports = function (app) {
   );
   app.use("/marks", auth, require("../../routes/admin/manage_marks.route"));
   app.use("/login", require("../../routes/login.route"));
-  app.use("/account", require("../../routes/admin/manage_accounts.route"));
-  app.use("/admin", require("../../routes/admin/admin.route"));
+  app.use("/account",auth, require("../../routes/admin/manage_accounts.route"));
+  app.use("/admin",auth, require("../../routes/admin/admin.route"));
 };

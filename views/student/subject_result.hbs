@@ -1,4 +1,4 @@
-<div class="span9">
+<div class="span12">
     <div class="content">
         <div class="module message">
             <div class="module-head">
@@ -7,97 +7,65 @@
             </div>
             <div class="module-option clearfix">
                 <div class="pull-left">
-                    Tổng số học phần: 3 <br>
-                    Tổng số tín chỉ: 12 <br>
-                </div>
-            </div>
-            <div class="module-option clearfix">
-                <div class="pull-left">
                     <div class="btn-group">
                         <button class="btn">
-                            HK1 (2020-2021)</button>
+                            Tất cả</button>
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Tất cả</a></li>
-                            <li><a href="#">Học kì 1 (2020-2021)</a></li>
-                            <li><a href="#">Học kì 2 (2020-2021)</a></li>
-                            
+                            <li><a href="/submit/subject/result">Tất cả</a></li>
+                            {{#each filters}}
+
+                            <li><a href="/submit/subject/result/?filter={{filter}}">{{filter}}</a></li>
+                            {{/each}}
+
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="module-body table">
-                <table class="table table-message">
+                <table class="table table-message" id="myTable">
                     <tbody>
                         <tr class="heading">
                             <td>STT</td>
-                            <td>Mã HP</td>
-                            <td>Tên HP</td>
-                            <td>Số TC</td>
-                            <td>Giảng viên</td>
+                            <td class="cell-author hidden-phone hidden-tablet">
+                                NH/HK
+                            </td>
+                            <td>Mã học phần</td>
+                            <td>
+                                Tên HP
+                            </td>
+                            <td>
+                                Số tín chỉ
+                            </td>
+
+                            <td>
+                                Số SV
+                            </td>
                             <td>Lịch học</td>
-                            <td>Số SV</td>
                         </tr>
-                        </tr>
-                        <tr class="unread">
-                            <td>1</td>
-                            <td>CTDLGT21</td>
-                            <td>Cấu trúc dữ liệu và giải thuật</td>
-                            <td>4</td>
-                            <td>
-                                Nguyễn Tiến Đạt <br>
-                                Võ Nhật Vinh
-                                <br>
-                                Bùi Thanh Hiếu
-                                <br>
-                            </td>
-                            <td>Lý thuyết: T2(1-4) <br>
-                                Thực hành: Nhóm 1
-
-                            </td>
-                            <td>1/15</td>
-                        </tr>
-                        <tr class="unread">
-
-                            <td>2</td>
-                            <td>CSTTNT21</td>
-                            <td>Cơ sở trí tuệ nhân tạo</td>
-                            <td>4</td>
-                            <td>
-                                Nguyễn Tiến Đạt <br>
-                                Võ Nhật Vinh
-                                <br>
-                                Bùi Thanh Hiếu
-                                <br>
-                            </td>
-                            <td>Lý thuyết: T2(1-4) <br>
-                                Thực hành: Nhóm 1
-
-                            </td>
-                            <td>1/15</td>
-                        </tr>
+                        {{#each list}}
 
                         <tr class="unread">
-                            <td>3</td>
-                            <td>CNPM21</td>
-                            <td>Công nghệ phần mềm</td>
-                            <td>4</td>
+                            <td>{{Add @index 1}}</td>
                             <td>
-                                Nguyễn Tiến Đạt <br>
-                                Võ Nhật Vinh
-                                <br>
-                                Bùi Thanh Hiếu
-                                <br>
+                                {{NamHoc HocPhan.NgayBatDau HocPhan.NgayKetThuc HocPhan.HocKi}}/{{HocPhan.HocKi}}
                             </td>
-                            <td>Lý thuyết: T2(1-4) <br>
-                                Thực hành: Nhóm 1
+                            <td>{{HocPhan.MonHoc.MaMonHoc}}</td>
+                            <td>
+                                {{HocPhan.MonHoc.MonHoc}}
+                            </td>
+                            <td>
+                                {{HocPhan.MonHoc.SoTC}}
 
                             </td>
-                            <td>1/15</td>
-                            <td></td>
+                            <td>
+                                {{countArray HocPhan.DSSinhVien}}/{{HocPhan.SoSVToiDa}}
+                            </td>
+                            <td>{{HocPhan.LichHoc}}</td>
                         </tr>
+                        {{/each}}
                     </tbody>
                 </table>
             </div>

@@ -1,34 +1,33 @@
-
 <div class="navbar navbar-fixed-top">
-		<div class="navbar-inner">
-			<div class="container">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-					<i class="icon-reorder shaded"></i>
-				</a>
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+				<i class="icon-reorder shaded"></i>
+			</a>
 
-			  	<a class="brand" href="/dashboard">
-			  		Hệ thống quản lý sinh viên
-			  	</a>
+			<a class="brand" href="/dashboard">
+				Hệ thống quản lý sinh viên
+			</a>
 
-				<div class="nav-collapse collapse navbar-inverse-collapse">
-					<form class="navbar-search pull-left input-append" action="#">
-						<input type="text" class="span3">
-						<button class="btn" type="button">
-							<i class="icon-search"></i>
-						</button>
-					</form>
-				
-					<ul class="nav pull-right">
-						<li><a href="/admin/guide">
-						<i class="icon-bell"></i>
+			<div class="nav-collapse collapse navbar-inverse-collapse">
+				<form class="navbar-search pull-left input-append" action="#">
+					<input type="text" class="span3">
+					<button class="btn" type="button">
+						<i class="icon-search"></i>
+					</button>
+				</form>
+					<form action="/login/student/out" method="post" id="logoutFrm"> </form>
+
+				<ul class="nav pull-right">
+					<li><a href="/admin/guide">
+							<i class="icon-bell"></i>
 							Xin chào Nguyễn Bình Nguyên
 						</a></li>
-						
-						<li><a href="/admin/guide">
+					<li><a href="javascript:{}" onclick="document.getElementById('logoutFrm').submit();">
 							Đăng xuất
 						</a></li>
-					</ul>
-				</div><!-- /.nav-collapse -->
+				</ul>
 			</div>
-		</div><!-- /navbar-inner -->
-	</div><!-- /navbar -->
+		</div>
+	</div>
+</div>

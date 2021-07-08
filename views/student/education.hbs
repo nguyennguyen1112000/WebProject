@@ -9,17 +9,17 @@
                 <div class="pull-left">
                     <div class="btn-group">
                         <button class="btn">
-                            HK1(2020-2021)</button>
+                            Tất cả</button>
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Tất cả</a></li>
-                            <li><a href="#">Học kì 1 (2021-2022)</a></li>
-                            <li><a href="#">Draft(2)</a></li>
-                            <li><a href="#">Trash</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Settings</a></li>
+                            <li><a href="/education">Tất cả</a></li>
+                            {{#each filters}}
+
+                            <li><a href="/education/?filter={{filter}}">{{filter}}</a></li>
+                            {{/each}}
+
                         </ul>
                     </div>
                 </div>
@@ -47,60 +47,28 @@
                             </td>
                             <td>Ghi chú</td>
                         </tr>
-                        <tr class="unread">
-                            <td class="cell-author hidden-phone hidden-tablet">
-                                2020-2021/1
-                            </td>
-                            <td>CTDLGT21</td>
-                            <td class="cell-title">
-                                Cấu trúc dữ liệu và giải thuật
-                            </td>
-                            <td>
-                                4
-                            </td>
-
-                            <td class="cell-time align-right">
-                                9.0
-                            </td>
-                            <td>Đạt</td>
-                        </tr>
-                        <tr class="unread starred">
-
-                            <td class="cell-author hidden-phone hidden-tablet">
-                                2020-2021/1
-                            </td>
-                            <td>CTDLGT21</td>
-                            <td class="cell-title">
-                                Cấu trúc dữ liệu và giải thuật
-                            </td>
-                            <td>
-                                4
-                            </td>
-
-                            <td class="cell-time align-right">
-                                9.0
-                            </td>
-                            <td>Đạt</td>
-                        </tr>
+                        {{#each list}}
 
                         <tr class="unread">
-
                             <td class="cell-author hidden-phone hidden-tablet">
-                                2020-2021/1
+                                {{NamHoc HocPhan.NgayBatDau HocPhan.NgayKetThuc HocPhan.HocKi}}/{{HocPhan.HocKi}}
                             </td>
-                            <td>CTDLGT21</td>
+                            <td>{{HocPhan.MonHoc.MaMonHoc}}</td>
                             <td class="cell-title">
-                                Cấu trúc dữ liệu và giải thuật
+                                {{HocPhan.MonHoc.MonHoc}}
+
                             </td>
                             <td>
-                                4
+                                {{HocPhan.MonHoc.SoTC}}
+
                             </td>
 
                             <td class="cell-time align-right">
-                                9.0
+                                {{DiemTK}}
                             </td>
-                            <td>Đạt</td>
+                            <td>{{XepLoai DiemTK}}</td>
                         </tr>
+                        {{/each}}
                     </tbody>
                 </table>
             </div>

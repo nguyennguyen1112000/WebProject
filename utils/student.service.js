@@ -1,10 +1,12 @@
 const Student = require("../model/students.model");
 const MajorService = require("../utils/major.service");
+const HistoryService = require("../utils/history_subject.service");
 class StudentStore {
   constructor() {
     this.studentsModel = require("../model/students.model");
     this.majorService = new MajorService();
     this.subjectModel = require("../model/subjects.model");
+    this.historyService = new HistoryService();
   }
   async all() {
     return await this.studentsModel.find({}).populate([{ path: "Nganh" }]);
@@ -15,7 +17,7 @@ class StudentStore {
       .populate([{ path: "Nganh" }]);
   }
   async findById(id) {
-    return await this.studentsModel.findById(id);
+    return await this.studentsModel.findById(id).populate([{ path: "Nganh" },{path:'HPTichLuy'}]);
   }
   async detail(condition) {
     return await this.studentsModel
@@ -70,6 +72,51 @@ class StudentStore {
     }
     await student.save();
   }
+  async education(id, filter) {
+    var student = await this.studentsModel
+      .findById(id)
+      .populate([{ path: "HPTichLuy" }]);
+    student.HPTichLuy = await Promise.all(
+      student.HPTichLuy.map(async (obj) => {
+        const subject = await this.subjectModel
+          .findById(obj.HocPhan)
+          .populate([{ path: "MonHoc" }]);
+        return {
+          _id: obj._id,
+          HocPhan: subject,
+          DiemTK: obj.DiemTK,
+        };
+      })
+    );
+    if (filter !== undefined) {
+      student.HPTichLuy = student.HPTichLuy.filter((obj) => {
+        var year;
+        if (obj.HocPhan.HocKi == 1) {
+          year = obj.HocPhan.NgayKetThuc.getFullYear();
+        } else if (obj.HocPhan.HocKi == 2) {
+          year = obj.HocPhan.NgayBatDau.getFullYear();
+        }
+        return `${year - 1}-${year}/${obj.HocPhan.HocKi}` == filter;
+      });
+    }
+
+    return student.HPTichLuy;
+  }
+  async filterEducation(id) {
+    const HPTichLuy = await this.education(id);
+    const filters = [];
+    HPTichLuy.forEach((obj) => {
+      var year;
+      if (obj.HocPhan.HocKi == 1) {
+        year = obj.HocPhan.NgayKetThuc.getFullYear();
+      } else if (obj.HocPhan.HocKi == 2) {
+        year = obj.HocPhan.NgayBatDau.getFullYear();
+      }
+      if (!filters.includes(`${year - 1}-${year}/${obj.HocPhan.HocKi}`))
+        filters.push(`${year - 1}-${year}/${obj.HocPhan.HocKi}`);
+    });
+    return filters.sort();
+  }
 
   async submitSubject(subjectsData, student) {
     const props = Object.getOwnPropertyNames(subjectsData);
@@ -87,9 +134,41 @@ class StudentStore {
           Nhom: group,
         });
         await subject.save();
+        const history = {
+          SinhVien: saveStudent.MSSV,
+          HocPhan: subject._id,
+          TinhTrang: true,
+        };
+        await this.historyService.add(history);
       }
     }
     await saveStudent.save();
+  }
+  async allResidence(id) {
+    const student = await this.studentsModel.findById(id);
+    return student.LuuTru;
+  }
+  async addResidence(id, data) {
+    const student = await this.studentsModel.findById(id);
+    student.LuuTru.push(data);
+    await student.save();
+  }
+  async updateResidence(id, data, index) {
+    const student = await this.studentsModel.findById(id);
+    const { ThoiGianBD, ThoiGianKT, DiaChi, GhiChu } = data;
+    student.LuuTru[index].ThoiGianBD = ThoiGianBD;
+    student.LuuTru[index].ThoiGianKT = ThoiGianKT;
+    student.LuuTru[index].DiaChi = DiaChi;
+    student.LuuTru[index].GhiChu = GhiChu;
+    await student.save();
+  }
+  async deleteResidence(id, index) {
+    const student = await this.studentsModel.findById(id);
+    student.LuuTru = [
+      ...student.LuuTru.splice(0, index),
+      ...student.LuuTru.splice(index + 1),
+    ];
+    await student.save();
   }
 }
 

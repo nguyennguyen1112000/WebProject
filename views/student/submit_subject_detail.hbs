@@ -12,8 +12,73 @@
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
+        $('.deleteFrm').submit(function (e) {
+            {
+                e.preventDefault();
+                var url = $(this).attr("action");
+                var request_method = $(this).attr("method");
+                frmData = $(this).serialize();
+                console.log(url,request_method,frmData);
 
+                Swal.fire({
+                    title: 'Bạn có chắc chắn hủy học phần này?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Hủy!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: request_method,
+                            url: url,
+                            data: frmData,
+                            success: function (data) {
+                                Swal.fire(
+                                    data.success,
+                                    '',
+                                    'success'
+                                )
+                                    .then(function () {
+                                        location.reload(true)
+                                    })
+                            }
+                        });
+                    }
+                })
+            }
+        })
 
+        /*$(".delete-button").click(function () {
+            const MaHP = $(this).id;
+            console.log(MaHP)
+            Swal.fire({
+                title: 'Bạn có chắc chắn hủy học phần này?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Hủy!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "post",
+                        url: `/submit/subject/delete/${MaHP}`,
+                        data: null,
+                        success: function (data) {
+                            Swal.fire(
+                                data.success,
+                                '',
+                                'success'
+                            )
+                                .then(function () {
+                                    location.reload(true)
+                                })
+                        }
+                    });
+                }
+            })
+        });*/
     });
 </script>
 <script>
@@ -84,13 +149,86 @@
                                 {{/ifEID}}
                                 {{/each}}</td>
                             <td>{{countArray DSSinhVien}}/{{SoSVToiDa}}</td>
-                            <td><button type="submit" class="btn btn-default"><i class="icon-trash"></i></button></td>
+                            <form class="deleteFrm" action="/submit/subject/delete/{{MaHP}}" method="POST">
+                                <td><button type="submit" class="btn btn-default"><i
+                                            class="icon-trash delete-button"></i></button>
+                                </td>
+                            </form>
                         </tr>
                         {{/each}}
                     </tbody>
                 </table>
             </div>
-            <div class="module-foot">
+
+            <div class="module-head">
+                <h3>
+                    Danh sách học phần không được phép ĐK</h3>
+            </div>
+
+            <div class="module-body table">
+                <table class="table table-message">
+                    <tbody>
+                        <tr class="heading">
+                            <td>STT</td>
+                            <td>Mã HP</td>
+                            <td>Tên HP</td>
+                            <td>Số TC</td>
+                            <td>Giảng viên</td>
+                            <td>Lịch học</td>
+                            <td>Lý do</td>
+                        </tr>
+                        {{#each ../forbiddens}}
+                        <tr class="read">
+
+                            <td>{{Add @index 1}}</td>
+                            <td>{{MaHP}}</td>
+                            <td>{{TenHP}}</td>
+                            <td>{{MonHoc.SoTC}}</td>
+                            <td>{{#each GVLyThuyet}}
+                                {{TenGV}} <br>
+                                {{/each}}
+                                {{#each GVThucHanh}}
+                                {{TenGV}}
+                                <br>
+                                {{/each}}
+                            </td>
+                            <td>Lý thuyết: {{LichHoc}} <br>
+                                {{#each DSSinhVien}}
+                                {{#ifEID SinhVien._id ../../../studentAcc.SinhVien}}
+                                Thực hành: Nhóm {{Nhom}}
+
+                                {{/ifEID}}
+                                {{/each}}</td>
+                            <td>Đã đậu</td>
+                        </tr>
+                        {{/each}}
+                        {{#each ../previouss}}
+                        <tr class="read">
+
+                            <td>{{Add @index 1}}</td>
+                            <td>{{MaHP}}</td>
+                            <td>{{TenHP}}</td>
+                            <td>{{MonHoc.SoTC}}</td>
+                            <td>{{#each GVLyThuyet}}
+                                {{TenGV}} <br>
+                                {{/each}}
+                                {{#each GVThucHanh}}
+                                {{TenGV}}
+                                <br>
+                                {{/each}}
+                            </td>
+                            <td>Lý thuyết: {{LichHoc}} <br>
+                                {{#each DSSinhVien}}
+                                {{#ifEID SinhVien._id ../../../studentAcc.SinhVien}}
+                                Thực hành: Nhóm {{Nhom}}
+
+                                {{/ifEID}}
+                                {{/each}}</td>
+                            <td>Vi phạm HP tiên quyết</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
