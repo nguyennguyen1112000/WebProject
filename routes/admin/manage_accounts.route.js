@@ -18,5 +18,14 @@ router.get("/manage", async function (req, res) {
     res.send("View error log at server console.");
   }
 });
+router.post("/state/:id", async function (req, res) {
+  try {
+    await accountService.updateState(req.params.id);
+    res.redirect('/account/manage');
+  } catch (err) {
+    console.error(err);
+    res.send("View error log at server console.");
+  }
+});
 
 module.exports = router;

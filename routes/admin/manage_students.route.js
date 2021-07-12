@@ -75,6 +75,16 @@ let provinces = [
   { province: "Hà Nội" },
   { province: "TP HCM" },
 ];
+router.post("/delete", async function (req, res) {
+  try {
+    console.log(12)
+    await studentService.deleteAll();
+  } catch (err) {
+    console.error(err);
+    res.send("View error log at server console.");
+  }
+});
+
 
 router.get("/upload", async function (req, res) {
   try {

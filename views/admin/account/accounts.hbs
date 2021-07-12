@@ -1,43 +1,4 @@
-{{#section 'footer'}}
-<script>
 
-
-    $(document).ready(function () {
-        $("form").submit(function (e) {
-            e.preventDefault()
-            var url = $(this).attr("action");
-            var request_method = $(this).attr("method")
-            frmData = $(this).serialize()
-            $.ajax({
-                type: request_method,
-                url: url,
-                data: frmData,
-                success: function (data) {
-                    if (data.success) {
-                        Swal.fire(
-                            'Xóa học phần',
-                            data.success,
-                            'success'
-                        )
-                            .then(function () {
-                                location.reload(true)
-
-                            })
-                    }
-
-                }
-            });
-
-        })
-
-    });
-
-
-
-</script>
-
-
-{{/section}}
 <div class="span9">
     <div class="content">
         <div class="module">
@@ -66,7 +27,6 @@
                                         <th>Email</th>
                                         <th>Reset mật khẩu</th>
                                         <th>Khóa tài khoản</th>
-                                        <th>Xóa tài khoản</th>
                                     </tr>
 
 
@@ -82,13 +42,17 @@
                                         <td>{{DateFormat SinhVien.NgaySinh}}</td>
                                         <td>{{SinhVien.Email}}</td>
                                         <td><button class="btn btn-default "><i class="icon-spinner"></i></button> </td>
-                                        <td><button class="btn btn-default "><i class="icon-key"></i></button></td>
-                                        <td><button class="btn btn-default "><i class="icon-trash"></i></button></td>
+                                        <form action="/account/state/{{_id}}" method="POST">
+                                            <td>
+                                                {{#ifCond TrangThai true}}
+                                                <button class="btn btn-success "><i class="icon-key"></i></button>
+                                            </td>
+                                            {{else}}
+                                            <button class="btn btn-danger "><i class="icon-lock"></i></button></td>
+                                            {{/ifCond}}
+                                        </form>
                                     </tr>
-
                                     {{/each}}
-
-
                                 </tbody>
                             </table>
                         </div>

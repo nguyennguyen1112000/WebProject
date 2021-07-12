@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const subjects = require("../../model/subjects.model");
-const teachers = require('../../model/teachers.model');
+const teachers = require("../../model/teachers.model");
 const StudentService = require("../../utils/student.service");
 const studentService = new StudentService();
 const reader = require("xlsx");
@@ -42,7 +42,7 @@ router.get("/students/:MSSV", async function (req, res) {
 });
 router.get("/subjects/:MaHP", async function (req, res) {
   try {
-    condition = req.params.id;
+    condition = req.params;
     const result = await subjectService.detail(condition);
     res.render("admin/manage_marks/marks_subjects", {
       HocPhan: mongoose.singleMongooseToObject(result),
@@ -100,7 +100,7 @@ router.get("/upload/:MaHP", async function (req, res) {
 
 router.post("/upload/:MaHP", upload, async function (req, res) {
   try {
-    console.log(req.params)
+    console.log(req.params);
     if (req.query.update) {
       condition = req.params;
       finish = req.query.finish;
@@ -118,7 +118,7 @@ router.post("/upload/:MaHP", upload, async function (req, res) {
         const data = parseFile(file);
         const results = await subjectService.detail(req.params);
         docs = JSON.parse(JSON.stringify(results));
-        console.log(req.params)
+        console.log(req.params);
         docs.DSSinhVien.forEach((obj) => {
           data.forEach((dt) => {
             if (obj.SinhVien.MSSV == dt.MSSV) {

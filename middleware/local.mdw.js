@@ -10,6 +10,7 @@ module.exports = function (app) {
     next();
   });
   app.use(async function (req, res, next) {
+    if (req.session.confirm == undefined) req.session.confirm = null;
     if (req.session.DKHP == undefined) req.session.DKHP = null;
     res.locals.DKHP = req.session.DKHP;
     if (req.session.DKHP != null) res.locals.step_on = true;

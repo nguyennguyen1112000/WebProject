@@ -22,7 +22,15 @@ class ModuleService {
   }
   async patch(condition, update) {
     const to_update = await this.detail(condition);
-    to_update.overwrite(update);
+    console.log(update);
+    const { Nganh, ChuyenNganh, MaMonHoc, MonHoc, MonTienQuyet, SoGioTC } =
+      update;
+    to_update.Nganh = Nganh;
+    to_update.ChuyenNganh = ChuyenNganh;
+    to_update.MaMonHoc = MaMonHoc;
+    to_update.MonHoc = MonHoc;
+    to_update.MonTienQuyet = MonTienQuyet;
+    to_update.SoGioTC = SoGioTC;
     await to_update.save();
   }
   async add(module) {

@@ -27,9 +27,7 @@ class SubjectService {
   async byId(id) {
     return await this.subjectsModel
       .findById(id)
-      .populate([
-        { path: "DSSinhVien.SinhVien" },
-      ]);
+      .populate([{ path: "DSSinhVien.SinhVien" }]);
   }
   async detail(condition) {
     return await this.subjectsModel
@@ -103,10 +101,13 @@ class SubjectService {
         _id: subject.DSSinhVien[i].SinhVien._id,
       });
       student.HPTichLuy.forEach((obj) => {
+        console.log(obj.HocPhan._id);
+
         if (obj.HocPhan._id.equals(subject._id)) {
           obj.DiemTK = +data[i];
         }
       });
+
       await student.save();
     }
     subject.NhapDiem = state;
@@ -130,7 +131,6 @@ class SubjectService {
       .findById(subjectId2)
       .populate([{ path: "MonHoc" }]);
     const moduleId2 = module2.MonHoc._id;
-    //console.log(moduleId1,moduleId2);
     return moduleId1.equals(moduleId2);
   }
   async passPreviousModule(studentId, subject) {

@@ -47,7 +47,8 @@
 
 						<ul class="widget widget-menu unstyled">
 							<li><a href="/subjects/open/list"><i class="menu-icon icon-bold"></i> Quản lý ĐKHP</a></li>
-							<li><a href="/accounts"><i class="menu-icon icon-bold"></i> Quản lý tài khoản</a></li>
+							<li><a href="/account/manage"><i class="menu-icon icon-bold"></i> Quản lý tài khoản</a></li>
+							<form action="/login/out" method="POST" id="logout"></form>
 							<li><a href="javascript:logout()"><i class="menu-icon icon-signout"></i>Đăng xuất</a></li>
 						</ul>
 					</div>
@@ -83,7 +84,7 @@
 
 	<script>
 		function logout() {
-			$('.frm-out').submit()
+			$('#logout').submit()
 		}
 	</script>
 

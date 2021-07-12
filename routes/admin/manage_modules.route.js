@@ -111,8 +111,9 @@ router.post("/edit/:MaMonHoc", async function (req, res) {
 });
 router.post("/delete/:MaMonHoc", async function (req, res) {
   try {
+    console.log(req.params)
     await moduleService.delete(req.params);
-    res.json({ succ: "Xóa học phần thành công" });
+    res.json({ succ: "Xóa môn học thành công" });
   } catch (err) {
     console.error(err);
     res.send("View error log at server console.");
